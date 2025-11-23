@@ -1,0 +1,43 @@
+services:
+  api:
+    build: ./api
+    container_name: api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=appuser
+      - DB_PASSWORD=apppassword
+      - DB_DATABASE=skills_matrix
+    depends_on:
+      - mysql
+    volumes:
+      - ./api:/app
+      - ./public:/app/public
+      - /app/node_modules
+    networks:
+      - skills-matrix-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: skills_matrix
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - skills-matrix-network
+    command: --default-authentication-plugin=mysql_native_password
+
+networks:
+  skills-matrix-network:
+    driver: bridge
