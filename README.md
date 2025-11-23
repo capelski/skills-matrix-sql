@@ -15,6 +15,9 @@ This application consists of two main services:
 - Install [node.js](https://nodejs.org/en/download/current)
 - Install [git](https://git-scm.com/install/)
 - Clone this repository
+    ```bash
+    git clone https://github.com/capelski/skills-matrix-sql.git
+    ```
 - Optional. Install the api project dependencies
     ```bash
     cd api

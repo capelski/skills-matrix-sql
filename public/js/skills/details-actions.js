@@ -45,7 +45,7 @@
     function getEmployees() {
         var employeesPromise = Promise.resolve(paginatedList.defaultInstance);
         if (state.addEmployeesList.keywords.length > 0) {
-            employeesPromise = ajax.get('/api/employee', {
+            employeesPromise = ajax.get('/api/employees', {
                 keywords: state.addEmployeesList.keywords
             }, paginatedList.defaultInstance);
         }
@@ -62,7 +62,7 @@
         .then(function() {
             state.loading = true;
             render(state);
-            return ajax.remove('/api/skill?id=' + state.skill.Id);
+            return ajax.remove('/api/skills?id=' + state.skill.Id);
         })
         .then(function (skill) {
             basicModal.close();
@@ -88,7 +88,7 @@
     function save(state, event) {
         state.loading = true;
         render(state);
-        ajax.save('/api/skill', state.skill)
+        ajax.save('/api/skills', state.skill)
         .then(function (skill) {
             if (skill) {
                 Navigation.navigate('skill-details-section', {
@@ -133,7 +133,7 @@
         
         var skillPromise = Promise.resolve(state.skill);
         if (state.skill.Id != 0) {
-            skillPromise = ajax.get('/api/skill/getById', {
+            skillPromise = ajax.get('/api/skills/getById', {
                 id : state.skill.Id
             });
         }

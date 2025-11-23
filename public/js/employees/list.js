@@ -19,7 +19,7 @@
     };
 
     function getEmployees(state) {
-        js.stallPromise(ajax.get('/api/employee', {
+        js.stallPromise(ajax.get('/api/employees', {
             keywords: state.keywords,
             page: state.page + state.pageOffset,
             pageSize: state.pageSize
