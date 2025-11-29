@@ -15,7 +15,7 @@ export class EmployeesController {
   ) {
     return sqlOperationHandler(
       () => this.employeesService.findAll({ keywords, page, pageSize }),
-      'Error fetching employees',
+      'getManyEmployeesSql / countAllEmployeesSql',
     );
   }
 
@@ -23,20 +23,20 @@ export class EmployeesController {
   getMostSkilled() {
     return sqlOperationHandler(
       () => this.employeesService.getMostSkilled(),
-      'Error fetching most skilled employees',
+      'getMostSkilledEmployeesSql',
     );
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return sqlOperationHandler(() => this.employeesService.findOne(+id), 'Error fetching employee');
+    return sqlOperationHandler(() => this.employeesService.findOne(+id), 'getOneEmployeeSql');
   }
 
   @Post()
   create(@Body() employeeDto: EmployeeDto) {
     return sqlOperationHandler(
       () => this.employeesService.create(employeeDto),
-      'Error creating employee',
+      'insertEmployeeSql',
     );
   }
 
@@ -44,12 +44,12 @@ export class EmployeesController {
   update(@Body() employeeDto: EmployeeDto) {
     return sqlOperationHandler(
       () => this.employeesService.update(employeeDto),
-      'Error updating employee',
+      'updateEmployeeSql',
     );
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return sqlOperationHandler(() => this.employeesService.remove(+id), 'Error deleting employee');
+    return sqlOperationHandler(() => this.employeesService.remove(+id), 'deleteEmployeeSql');
   }
 }

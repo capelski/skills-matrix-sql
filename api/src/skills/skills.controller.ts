@@ -15,38 +15,32 @@ export class SkillsController {
   ) {
     return sqlOperationHandler(
       () => this.skillsService.findAll({ keywords, page, pageSize }),
-      'Error fetching skills',
+      'getManySkillsSql / countAllSkillsSql',
     );
   }
 
   @Get('getRarest')
   getRarest() {
-    return sqlOperationHandler(
-      () => this.skillsService.getRarest(),
-      'Error fetching rarest skills',
-    );
+    return sqlOperationHandler(() => this.skillsService.getRarest(), 'getRarestSkillsSql');
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return sqlOperationHandler(() => this.skillsService.findOne(+id), 'Error fetching skill');
+    return sqlOperationHandler(() => this.skillsService.findOne(+id), 'getOneSkillSql');
   }
 
   @Post()
   create(@Body() createSkillDto: SkillDto) {
-    return sqlOperationHandler(
-      () => this.skillsService.create(createSkillDto),
-      'Error creating skill',
-    );
+    return sqlOperationHandler(() => this.skillsService.create(createSkillDto), 'insertSkillSql');
   }
 
   @Put()
   update(@Body() skillDto: SkillDto) {
-    return sqlOperationHandler(() => this.skillsService.update(skillDto), 'Error updating skill');
+    return sqlOperationHandler(() => this.skillsService.update(skillDto), 'updateSkillSql');
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return sqlOperationHandler(() => this.skillsService.remove(+id), 'Error deleting skill');
+    return sqlOperationHandler(() => this.skillsService.remove(+id), 'deleteSkillSql');
   }
 }
