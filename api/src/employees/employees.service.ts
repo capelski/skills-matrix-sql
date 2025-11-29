@@ -1,0 +1,103 @@
+import { Injectable } from '@nestjs/common';
+import { DatabaseService } from '../database/database.service';
+import { EmployeeSkillRelationsService } from '../employee-skill-relations/employee-skill-relations.service';
+import { PaginatedList, PaginatedListParameters } from '../paginated-list';
+import { Skill } from '../skills/entities/skill.entity';
+import {
+  countAllEmployeesSql,
+  deleteEmployeeSql,
+  getManyEmployeesSql,
+  getMostSkilledEmployeesSql,
+  getOneEmployeeSql,
+  insertEmployeeSql,
+  updateEmployeeSql,
+} from '../sql-commands';
+import { EmployeeDto } from './dto/employee.dto';
+import { Employee } from './entities/employee.entity';
+
+@Injectable()
+export class EmployeesService {
+  constructor(
+    protected readonly databaseService: DatabaseService,
+    protected readonly employeeSkillRelationsService: EmployeeSkillRelationsService,
+  ) {}
+
+  async create(employeeDto: EmployeeDto): Promise<EmployeeDto> {
+    const [result] = await this.databaseService.execute(insertEmployeeSql, {
+      name: employeeDto.Name,
+    });
+
+    await this.insertRelations(employeeDto, employeeDto.Skills);
+
+    return this.findOne(result.insertId);
+  }
+
+  async findAll({
+    keywords,
+    page,
+    pageSize,
+  }: PaginatedListParameters): Promise<PaginatedList<Employee>> {
+    const currentPage = Number(page) || 0;
+    const currentPageSize = Number(pageSize) || 10;
+    const employeesPage = await this.databaseService.execute(getManyEmployeesSql, {
+      name: `%${keywords}%`,
+      limit: String(currentPageSize),
+      offset: String(currentPage * currentPageSize),
+    });
+    const [{ Total }] = await this.databaseService.execute(countAllEmployeesSql, {
+      name: `%${keywords}%`,
+    });
+
+    return {
+      CurrentPage: currentPage,
+      Items: employeesPage,
+      TotalPages: Math.ceil(Total / currentPageSize),
+      TotalItems: Total,
+    };
+  }
+
+  async findOne(id: number): Promise<EmployeeDto> {
+    const [employee] = await this.databaseService.execute(getOneEmployeeSql, { id: String(id) });
+
+    const skills = await this.employeeSkillRelationsService.findSkillsByEmployee(id);
+
+    return { ...employee, Skills: skills };
+  }
+
+  async getMostSkilled(): Promise<Employee[]> {
+    const employees = await this.databaseService.execute(getMostSkilledEmployeesSql);
+
+    return employees.map((employee) => {
+      return {
+        Id: employee.Id,
+        Name: employee.Name,
+        Skills: {
+          length: employee.SkillCount || 0,
+        },
+      };
+    });
+  }
+
+  protected async insertRelations(employee: Employee, skills: Skill[]): Promise<void> {
+    for (const skill of skills) {
+      await this.employeeSkillRelationsService.create(employee.Id, skill.Id);
+    }
+  }
+
+  async update(employeeDto: EmployeeDto): Promise<EmployeeDto> {
+    await this.databaseService.execute(updateEmployeeSql, {
+      name: employeeDto.Name,
+      id: String(employeeDto.Id),
+    });
+
+    await this.employeeSkillRelationsService.removeByEmployeeId(employeeDto.Id);
+
+    await this.insertRelations(employeeDto, employeeDto.Skills);
+
+    return this.findOne(employeeDto.Id);
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.databaseService.execute(deleteEmployeeSql, { id: String(id) });
+  }
+}

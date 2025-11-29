@@ -62,7 +62,7 @@
         .then(function() {
             state.loading = true;
             render(state);
-            return ajax.remove('/api/skills?id=' + state.skill.Id);
+            return ajax.remove(`/api/skills/${state.skill.Id}`);
         })
         .then(function (skill) {
             basicModal.close();
@@ -133,9 +133,7 @@
         
         var skillPromise = Promise.resolve(state.skill);
         if (state.skill.Id != 0) {
-            skillPromise = ajax.get('/api/skills/getById', {
-                id : state.skill.Id
-            });
+            skillPromise = ajax.get(`/api/skills/${state.skill.Id}`);
         }
 
         return js.stallPromise(skillPromise, 1500)

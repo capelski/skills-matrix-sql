@@ -21,7 +21,7 @@
         },
         arrayDifference: function(first, second, propertyName) {
             var result = first.filter(function(firstArrayElement) {
-                return second.filter(function(secondArrayElement) {
+                return (second || []).filter(function(secondArrayElement) {
                     return firstArrayElement[propertyName] === secondArrayElement[propertyName];
                 }).length === 0;
             });

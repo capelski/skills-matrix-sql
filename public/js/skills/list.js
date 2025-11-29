@@ -19,7 +19,7 @@
     };
 
     function getSkills(state) {
-        js.stallPromise(ajax.get('/api/skill', {
+        js.stallPromise(ajax.get('/api/skills', {
             keywords: state.keywords,
             page: state.page + state.pageOffset,
             pageSize: state.pageSize

@@ -17,7 +17,8 @@
                     result = data;
                 })
                 .fail(function(response) {
-                    toastr.error('An error ocurred', 'Oops!', {timeOut: 5000});
+                    const { message, title } = response.responseJSON;
+                    toastr.error(message, title || 'An error occurred', {timeOut: 5000});
                 })
                 .always(function(data) {
                     resolve(result);
@@ -35,24 +36,25 @@
                     result = data;
                 })
                 .fail(function(response) {
-                    toastr.error('An error ocurred', 'Oops!', {timeOut: 5000});
+                    const { message, title } = response.responseJSON;
+                    toastr.error(message, title || 'An error occurred', {timeOut: 5000});
                 })
                 .always(function(data) {
                     resolve(result);
                 });
             });
         },
-        save: function(url, entitity) {
+        save: function(url, entity) {
             return new Promise(function(resolve, reject) {
                 var result = null;
                 var request = {
                     type: 'POST',
                     url,
                     contentType: 'application/json',
-                    data: JSON.stringify(entitity)
+                    data: JSON.stringify(entity)
                 };
 
-                if (entitity.Id !== 0) {
+                if (entity.Id !== 0) {
                     request.type = 'PUT';
                 }
 
@@ -61,7 +63,8 @@
                     result = data;
                 })
                 .fail(function(response) {
-                    toastr.error('An error ocurred', 'Oops!', {timeOut: 5000});
+                    const { message, title } = response.responseJSON;
+                    toastr.error(message, title || 'An error occurred', {timeOut: 5000});
                 })
                 .always(function(data) {
                     resolve(result);

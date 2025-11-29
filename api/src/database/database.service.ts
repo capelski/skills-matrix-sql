@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import * as mysql from 'mysql2/promise';
 
 @Injectable()
@@ -15,6 +15,7 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
+      namedPlaceholders: true,
     });
   }
 
@@ -24,13 +25,9 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async query(sql: string, params?: any[]): Promise<any> {
-    const [rows] = await this.pool.execute(sql, params);
-    return rows;
-  }
-
-  async execute(sql: string, params?: any[]): Promise<any> {
-    return await this.pool.execute(sql, params);
+  async execute(sql: string, params?: Record<string, string>): Promise<any> {
+    const [result] = await this.pool.execute(sql, params);
+    return result;
   }
 
   getPool(): mysql.Pool {

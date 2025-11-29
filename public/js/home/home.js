@@ -44,7 +44,7 @@
             render();
         });
 
-        js.stallPromise(ajax.get('/api/skills/getRearest', {}, []), 1500)
+        js.stallPromise(ajax.get('/api/skills/getRarest', {}, []), 1500)
         .then(function(skills) {
             state.skills.loadPhase = 'loaded';
             state.skills.results = skills;

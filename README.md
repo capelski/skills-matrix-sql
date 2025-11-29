@@ -13,11 +13,7 @@ This application consists of two main services:
 
 - Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - Install [node.js](https://nodejs.org/en/download/current)
-- Install [git](https://git-scm.com/install/)
-- Clone this repository
-    ```bash
-    git clone https://github.com/capelski/skills-matrix-sql.git
-    ```
+- Download [this repository](https://github.com/capelski/skills-matrix-sql.git) either by cloning it (if you have git installed) or via [zip file](https://github.com/capelski/skills-matrix-sql/archive/refs/heads/main.zip)
 - Optional. Install the api project dependencies
     ```bash
     cd api

@@ -62,7 +62,7 @@
         .then(function() {
             state.loading = true;
             render(state);
-            return ajax.remove('/api/employees?id=' + state.employee.Id);
+            return ajax.remove(`/api/employees/${state.employee.Id}`);
         })
         .then(function (employee) {
             basicModal.close();
@@ -133,9 +133,7 @@
         
         var employeePromise = Promise.resolve(state.employee);
         if (state.employee.Id != 0) {
-            employeePromise = ajax.get('/api/employees/getById', {
-                id : state.employee.Id
-            });
+            employeePromise = ajax.get(`/api/employees/${state.employee.Id}`);
         }
 
         return js.stallPromise(employeePromise, 1500)
