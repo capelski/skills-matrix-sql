@@ -48,7 +48,7 @@
             }
         },
         stallPromise: function(promise, minimumTime) {
-            return Promise.all([promise, JsCommons.delay(minimumTime)])
+            return Promise.allSettled([promise, JsCommons.delay(minimumTime)])
             .then(function(results) {
                 return results[0];
             });
