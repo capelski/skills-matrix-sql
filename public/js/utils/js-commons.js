@@ -50,6 +50,9 @@
         stallPromise: function(promise, minimumTime) {
             return Promise.allSettled([promise, JsCommons.delay(minimumTime)])
             .then(function(results) {
+                if (results[0].status === 'rejected') {
+                    return Promise.reject(results[0].reason);
+                }
                 return results[0];
             });
         }
