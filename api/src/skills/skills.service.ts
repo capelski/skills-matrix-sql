@@ -5,12 +5,12 @@ import { Employee } from '../employees/entities/employee.entity';
 import { PaginatedList, PaginatedListParameters } from '../paginated-list';
 import {
   countAllSkillsSql,
-  deleteSkillSql,
+  deleteSkillByIdSql,
   getManySkillsSql,
-  getOneSkillSql,
   getRarestSkillsSql,
+  getSkillByIdSql,
   insertSkillSql,
-  updateSkillSql,
+  updateSkillByIdSql,
 } from '../sql-commands';
 import { SkillDto } from './dto/skill.dto';
 import { Skill } from './entities/skill.entity';
@@ -55,7 +55,7 @@ export class SkillsService {
   }
 
   async findOne(id: number): Promise<SkillDto> {
-    const [skill] = await this.databaseService.execute(getOneSkillSql, { id: String(id) });
+    const [skill] = await this.databaseService.execute(getSkillByIdSql, { id: String(id) });
 
     const employees = await this.employeeSkillRelationsService.findEmployeesBySkill(id);
 
@@ -83,7 +83,7 @@ export class SkillsService {
   }
 
   async update(skillDto: SkillDto): Promise<SkillDto> {
-    await this.databaseService.execute(updateSkillSql, {
+    await this.databaseService.execute(updateSkillByIdSql, {
       name: skillDto.Name,
       id: String(skillDto.Id),
     });
@@ -96,6 +96,6 @@ export class SkillsService {
   }
 
   async remove(id: number): Promise<void> {
-    await this.databaseService.execute(deleteSkillSql, { id: String(id) });
+    await this.databaseService.execute(deleteSkillByIdSql, { id: String(id) });
   }
 }

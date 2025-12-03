@@ -5,12 +5,12 @@ import { PaginatedList, PaginatedListParameters } from '../paginated-list';
 import { Skill } from '../skills/entities/skill.entity';
 import {
   countAllEmployeesSql,
-  deleteEmployeeSql,
+  deleteEmployeeByIdSql,
+  getEmployeeByIdSql,
   getManyEmployeesSql,
   getMostSkilledEmployeesSql,
-  getOneEmployeeSql,
   insertEmployeeSql,
-  updateEmployeeSql,
+  updateEmployeeByIdSql,
 } from '../sql-commands';
 import { EmployeeDto } from './dto/employee.dto';
 import { Employee } from './entities/employee.entity';
@@ -57,7 +57,7 @@ export class EmployeesService {
   }
 
   async findOne(id: number): Promise<EmployeeDto> {
-    const [employee] = await this.databaseService.execute(getOneEmployeeSql, { id: String(id) });
+    const [employee] = await this.databaseService.execute(getEmployeeByIdSql, { id: String(id) });
 
     const skills = await this.employeeSkillRelationsService.findSkillsByEmployee(id);
 
@@ -85,7 +85,7 @@ export class EmployeesService {
   }
 
   async update(employeeDto: EmployeeDto): Promise<EmployeeDto> {
-    await this.databaseService.execute(updateEmployeeSql, {
+    await this.databaseService.execute(updateEmployeeByIdSql, {
       name: employeeDto.Name,
       id: String(employeeDto.Id),
     });
@@ -98,6 +98,6 @@ export class EmployeesService {
   }
 
   async remove(id: number): Promise<void> {
-    await this.databaseService.execute(deleteEmployeeSql, { id: String(id) });
+    await this.databaseService.execute(deleteEmployeeByIdSql, { id: String(id) });
   }
 }

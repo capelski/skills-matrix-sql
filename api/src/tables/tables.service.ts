@@ -4,7 +4,6 @@ import {
   createEmployeeSkillRelationsTableSql,
   createEmployeesTableSql,
   createSkillsTableSql,
-  deleteEmployeeSkillRelationsTableSql,
   deleteEmployeesTableSql,
   deleteSkillsTableSql,
   dropEmployeeSkillRelationsTableSql,
@@ -25,7 +24,6 @@ export class TablesService {
   }
 
   async deleteData() {
-    await this.databaseService.execute(deleteEmployeeSkillRelationsTableSql);
     await this.databaseService.execute(deleteEmployeesTableSql);
     await this.databaseService.execute(deleteSkillsTableSql);
   }
