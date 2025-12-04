@@ -35,15 +35,16 @@ export class SkillsService {
     page,
     pageSize,
   }: PaginatedListParameters): Promise<PaginatedList<Skill>> {
+    const currentKeywords = `%${keywords || ''}%`;
     const currentPage = Number(page) || 0;
     const currentPageSize = Number(pageSize) || 10;
     const skills = await this.databaseService.execute(getManySkillsSql, {
-      name: `%${keywords}%`,
+      name: currentKeywords,
       limit: String(currentPageSize),
       offset: String(currentPage * currentPageSize),
     });
     const [{ Total }] = await this.databaseService.execute(countAllSkillsSql, {
-      name: `%${keywords}%`,
+      name: currentKeywords,
     });
 
     return {

@@ -37,15 +37,16 @@ export class EmployeesService {
     page,
     pageSize,
   }: PaginatedListParameters): Promise<PaginatedList<Employee>> {
+    const currentKeywords = `%${keywords || ''}%`;
     const currentPage = Number(page) || 0;
     const currentPageSize = Number(pageSize) || 10;
     const employeesPage = await this.databaseService.execute(getManyEmployeesSql, {
-      name: `%${keywords}%`,
+      name: currentKeywords,
       limit: String(currentPageSize),
       offset: String(currentPage * currentPageSize),
     });
     const [{ Total }] = await this.databaseService.execute(countAllEmployeesSql, {
-      name: `%${keywords}%`,
+      name: currentKeywords,
     });
 
     return {
