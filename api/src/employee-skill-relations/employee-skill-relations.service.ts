@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Employee, Skill } from '@skills-matrix/types';
 import { DatabaseService } from '../database/database.service';
-import { Employee } from '../employees/entities/employee.entity';
-import { Skill } from '../skills/entities/skill.entity';
 import {
   deleteEmployeeSkillRelationByEmployeeIdSql,
   deleteEmployeeSkillRelationBySkillIdSql,

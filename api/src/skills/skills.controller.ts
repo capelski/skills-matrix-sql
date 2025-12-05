@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { SkillDto } from '@skills-matrix/types';
 import { sqlOperationHandler } from '../sql-operation-handler';
-import { SkillDto } from './dto/skill.dto';
 import { SkillsService } from './skills.service';
 
 @Controller('api/skills')

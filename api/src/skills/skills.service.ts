@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import {
+  Employee,
+  PaginatedList,
+  PaginatedListParameters,
+  Skill,
+  SkillDto,
+} from '@skills-matrix/types';
 import { DatabaseService } from '../database/database.service';
 import { EmployeeSkillRelationsService } from '../employee-skill-relations/employee-skill-relations.service';
-import { Employee } from '../employees/entities/employee.entity';
-import { PaginatedList, PaginatedListParameters } from '../paginated-list';
 import {
   countAllSkillsSql,
   deleteSkillByIdSql,
@@ -12,8 +17,6 @@ import {
   insertSkillSql,
   updateSkillByIdSql,
 } from '../sql-commands';
-import { SkillDto } from './dto/skill.dto';
-import { Skill } from './entities/skill.entity';
 
 @Injectable()
 export class SkillsService {

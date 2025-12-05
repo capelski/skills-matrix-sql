@@ -1,12 +1,12 @@
-export type PaginatedListParameters = {
+export interface PaginatedListParameters {
   keywords?: string;
   page?: number;
   pageSize?: number;
-};
+}
 
-export type PaginatedList<T> = {
+export interface PaginatedList<T> {
   CurrentPage: number;
   Items: T[];
   TotalPages: number;
   TotalItems: number;
-};
+}
