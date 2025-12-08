@@ -11,6 +11,7 @@ const Employees: React.FC = () => {
     TotalPages: 1,
   });
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
   const [searchKeywords, setSearchKeywords] = useState('');
 
   const fetchEmployees = async (keywords?: string, page?: number) => {
@@ -18,8 +19,8 @@ const Employees: React.FC = () => {
     try {
       const data = await apiService.getEmployees({ keywords, page });
       setEmployees(data);
-    } catch (error) {
-      console.error('Error fetching employees:', error);
+    } catch (error: any) {
+      setMessage(`Error: ${error.title} - ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -115,6 +116,14 @@ const Employees: React.FC = () => {
                 </nav>
               )}
             </>
+          )}
+
+          {message && (
+            <div
+              className={`alert ${message.includes('Error') ? 'alert-danger' : 'alert-success'}`}
+            >
+              {message}
+            </div>
           )}
         </div>
       </div>

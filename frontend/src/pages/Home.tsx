@@ -7,6 +7,7 @@ const Home: React.FC = () => {
   const [mostSkilledEmployees, setMostSkilledEmployees] = useState<SkilledEmployee[]>([]);
   const [rarestSkills, setRarestSkills] = useState<RareSkill[]>([]);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,8 +18,8 @@ const Home: React.FC = () => {
         ]);
         setMostSkilledEmployees(employees);
         setRarestSkills(skills);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+      } catch (error: any) {
+        setMessage(`Error: ${error.title} - ${error.message}`);
       } finally {
         setLoading(false);
       }
@@ -104,6 +105,12 @@ const Home: React.FC = () => {
           </ul>
         </div>
       </div>
+
+      {message && (
+        <div className={`alert ${message.includes('Error') ? 'alert-danger' : 'alert-success'}`}>
+          {message}
+        </div>
+      )}
     </div>
   );
 };

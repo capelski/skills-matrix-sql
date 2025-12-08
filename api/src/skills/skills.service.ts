@@ -29,6 +29,7 @@ export class SkillsService {
 
   async create(skillDto: SkillDto): Promise<SkillDto> {
     const result: ResultSetHeader = await this.databaseService.execute(insertSkillSql, {
+      description: skillDto.Description,
       name: skillDto.Name,
     });
 
@@ -84,8 +85,9 @@ export class SkillsService {
 
   async update(skillDto: SkillDto): Promise<SkillDto> {
     await this.databaseService.execute(updateSkillByIdSql, {
-      name: skillDto.Name,
+      description: skillDto.Description,
       id: String(skillDto.Id),
+      name: skillDto.Name,
     });
 
     await this.employeeSkillRelationsService.removeBySkillId(skillDto.Id);

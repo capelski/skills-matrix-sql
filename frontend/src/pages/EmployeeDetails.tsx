@@ -9,6 +9,7 @@ const EmployeeDetails: React.FC = () => {
   const [employee, setEmployee] = useState<EmployeeDto>({
     Id: 0,
     Name: '',
+    Surname: '',
     Skills: [],
   });
   const [availableSkills, setAvailableSkills] = useState<Skill[]>([]);
@@ -34,9 +35,8 @@ const EmployeeDetails: React.FC = () => {
         // Fetch available skills for adding
         const skillsData = await apiService.getSkills();
         setAvailableSkills(skillsData.Items);
-      } catch (error) {
-        console.error('Error fetching employee data:', error);
-        setMessage('Error loading employee data');
+      } catch (error: any) {
+        setMessage(`Error: ${error.title} - ${error.message}`);
       } finally {
         setLoading(false);
       }
@@ -63,9 +63,8 @@ const EmployeeDetails: React.FC = () => {
         setMessage('Employee updated successfully');
       }
       setIsEditing(false);
-    } catch (error) {
-      console.error('Error saving employee:', error);
-      setMessage('Error saving employee');
+    } catch (error: any) {
+      setMessage(`Error: ${error.title} - ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -80,9 +79,8 @@ const EmployeeDetails: React.FC = () => {
     try {
       await apiService.deleteEmployee(employeeId);
       navigate('/employees');
-    } catch (error) {
-      console.error('Error deleting employee:', error);
-      setMessage('Error deleting employee');
+    } catch (error: any) {
+      setMessage(`Error: ${error.title} - ${error.message}`);
       setLoading(false);
     }
   };
@@ -139,6 +137,20 @@ const EmployeeDetails: React.FC = () => {
             className="form-control"
             value={employee.Name}
             onChange={(e) => setEmployee({ ...employee, Name: e.target.value })}
+            disabled={!isEditing && !isNew}
+          />
+        </div>
+
+        <p>
+          <label htmlFor="employee-surname">Surname</label>
+        </p>
+        <div className="form-group">
+          <input
+            id="employee-surname"
+            type="text"
+            className="form-control"
+            value={employee.Surname || ''}
+            onChange={(e) => setEmployee({ ...employee, Surname: e.target.value })}
             disabled={!isEditing && !isNew}
           />
         </div>

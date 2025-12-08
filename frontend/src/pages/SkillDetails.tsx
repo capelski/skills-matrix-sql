@@ -7,6 +7,7 @@ const SkillDetails: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
   const [skill, setSkill] = useState<SkillDto>({
+    Description: '',
     Id: 0,
     Name: '',
     Employees: [],
@@ -34,9 +35,8 @@ const SkillDetails: React.FC = () => {
         // Fetch available employees for adding
         const employeesData = await apiService.getEmployees();
         setAvailableEmployees(employeesData.Items);
-      } catch (error) {
-        console.error('Error fetching skill data:', error);
-        setMessage('Error loading skill data');
+      } catch (error: any) {
+        setMessage(`Error: ${error.title} - ${error.message}`);
       } finally {
         setLoading(false);
       }
@@ -63,9 +63,8 @@ const SkillDetails: React.FC = () => {
         setMessage('Skill updated successfully');
       }
       setIsEditing(false);
-    } catch (error) {
-      console.error('Error saving skill:', error);
-      setMessage('Error saving skill');
+    } catch (error: any) {
+      setMessage(`Error: ${error.title} - ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -80,9 +79,8 @@ const SkillDetails: React.FC = () => {
     try {
       await apiService.deleteSkill(skillId);
       navigate('/skills');
-    } catch (error) {
-      console.error('Error deleting skill:', error);
-      setMessage('Error deleting skill');
+    } catch (error: any) {
+      setMessage(`Error: ${error.title} - ${error.message}`);
       setLoading(false);
     }
   };
@@ -140,6 +138,21 @@ const SkillDetails: React.FC = () => {
             value={skill.Name}
             onChange={(e) => setSkill({ ...skill, Name: e.target.value })}
             disabled={!isEditing && !isNew}
+          />
+        </div>
+
+        <p>
+          <label htmlFor="skill-description">Description</label>
+        </p>
+        <div className="form-group">
+          <textarea
+            id="skill-description"
+            className="form-control"
+            value={skill.Description || ''}
+            onChange={(e) => setSkill({ ...skill, Description: e.target.value })}
+            disabled={!isEditing && !isNew}
+            rows={3}
+            placeholder="Enter skill description..."
           />
         </div>
 

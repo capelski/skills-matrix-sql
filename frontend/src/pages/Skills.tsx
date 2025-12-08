@@ -11,6 +11,7 @@ const Skills: React.FC = () => {
     TotalPages: 1,
   });
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
   const [searchKeywords, setSearchKeywords] = useState('');
 
   const fetchSkills = async (keywords?: string, page?: number) => {
@@ -18,8 +19,8 @@ const Skills: React.FC = () => {
     try {
       const data = await apiService.getSkills({ keywords, page });
       setSkills(data);
-    } catch (error) {
-      console.error('Error fetching skills:', error);
+    } catch (error: any) {
+      setMessage(`Error: ${error.title} - ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -113,6 +114,14 @@ const Skills: React.FC = () => {
                 </nav>
               )}
             </>
+          )}
+
+          {message && (
+            <div
+              className={`alert ${message.includes('Error') ? 'alert-danger' : 'alert-success'}`}
+            >
+              {message}
+            </div>
           )}
         </div>
       </div>

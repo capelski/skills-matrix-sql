@@ -1,6 +1,7 @@
 export interface Employee {
   Id: number;
   Name: string;
+  Surname?: string;
 }
 
 export interface EmployeeSkillRelation {
@@ -9,6 +10,7 @@ export interface EmployeeSkillRelation {
 }
 
 export interface Skill {
+  Description?: string;
   Id: number;
   Name: string;
 }
