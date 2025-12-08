@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ResultSetHeader } from 'mysql2';
 import { DatabaseService } from '../database/database.service';
 import {
   createEmployeeSkillRelationsTableSql,
@@ -9,6 +10,7 @@ import {
   dropEmployeeSkillRelationsTableSql,
   dropEmployeesTableSql,
   dropSkillsTableSql,
+  insertEmployeeSkillRelationSql,
   insertEmployeeSql,
   insertSkillSql,
 } from '../sql-commands';
@@ -35,42 +37,62 @@ export class TablesService {
   }
 
   async populateTables() {
+    const employeeIds: number[] = [];
     for (const employee of sampleEmployees) {
-      await this.databaseService.execute(insertEmployeeSql, {
+      const result: ResultSetHeader = await this.databaseService.execute(insertEmployeeSql, {
         name: employee.name,
+        surname: employee.surname,
       });
+      employeeIds.push(result.insertId);
     }
 
+    const skillIds: number[] = [];
     for (const skill of sampleSkills) {
-      await this.databaseService.execute(insertSkillSql, {
+      const result: ResultSetHeader = await this.databaseService.execute(insertSkillSql, {
+        description: '',
         name: skill.name,
       });
+      skillIds.push(result.insertId);
+    }
+
+    for (const employeeId of employeeIds) {
+      // Each employee gets between 1 and 5 skills
+      const numberOfSkills = Math.floor(Math.random() * 5) + 1;
+      const shuffledSkillIds = skillIds.sort(() => 0.5 - Math.random());
+      const selectedSkillIds = shuffledSkillIds.slice(0, numberOfSkills);
+
+      for (const skillId of selectedSkillIds) {
+        await this.databaseService.execute(insertEmployeeSkillRelationSql, {
+          employeeId: String(employeeId),
+          skillId: String(skillId),
+        });
+      }
     }
   }
 }
 
 const sampleEmployees = [
-  { name: 'Adele' },
-  { name: 'Laura Marling' },
-  { name: 'Zayn Malik' },
-  { name: 'Emily Maguire' },
-  { name: 'Amy Macdonald' },
-  { name: 'Kirsty MacColl' },
-  { name: 'Ewan MacColl' },
-  { name: 'Nick Lowe' },
-  { name: 'Jez Lowe' },
-  { name: 'Cher Lloyd' },
-  { name: 'Dua Lipa' },
-  { name: 'Leona Lewis' },
-  { name: 'Al Lewis' },
-  { name: 'Adam Leonardo' },
-  { name: 'John Lennon' },
-  { name: 'Charlie Landsborough' },
-  { name: 'Steve Knightley' },
-  { name: 'Beverley Knight' },
-  { name: 'Hani King' },
-  { name: 'Nik Kershaw' },
-  { name: 'Martyn Joseph' },
+  { name: 'Adele', surname: 'Adkins' },
+  { name: 'Laura', surname: 'Marling' },
+  { name: 'Zayn', surname: 'Malik' },
+  { name: 'Emily', surname: 'Maguire' },
+  { name: 'Amy', surname: 'Macdonald' },
+  { name: 'Kirsty', surname: 'MacColl' },
+  { name: 'Ewan', surname: 'MacColl' },
+  { name: 'Nick', surname: 'Lowe' },
+  { name: 'Jez', surname: 'Lowe' },
+  { name: 'Cher', surname: 'Lloyd' },
+  { name: 'Dua', surname: 'Lipa' },
+  { name: 'Leona', surname: 'Lewis' },
+  { name: 'Al', surname: 'Lewis' },
+  { name: 'Adam', surname: 'Leonardo' },
+  { name: 'John', surname: 'Lennon' },
+  { name: 'Charlie', surname: 'Landsborough' },
+  { name: 'Steve', surname: 'Knightley' },
+  { name: 'Beverley', surname: 'Knight' },
+  { name: 'Hani', surname: 'King' },
+  { name: 'Nik', surname: 'Kershaw' },
+  { name: 'Martyn', surname: 'Joseph' },
 ];
 
 const sampleSkills = [
