@@ -18,6 +18,7 @@ services:
       - ./api:/app
       - ./public:/app/public
       - /app/node_modules
+      - ./types:/app/node_modules/@skills-matrix/types
     networks:
       - skills-matrix-network
 
