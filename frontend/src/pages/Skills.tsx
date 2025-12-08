@@ -13,11 +13,17 @@ const Skills: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [searchKeywords, setSearchKeywords] = useState('');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
-  const fetchSkills = async (keywords?: string, page?: number) => {
+  const fetchSkills = async (nextKeywords: string, nextPage: number, nextPageSize: number) => {
     setLoading(true);
     try {
-      const data = await apiService.getSkills({ keywords, page: page ? String(page) : undefined });
+      const data = await apiService.getSkills({
+        keywords: nextKeywords,
+        page: String(nextPage),
+        pageSize: String(nextPageSize),
+      });
       setSkills(data);
     } catch (error: any) {
       setMessage(`Error: ${error.title} - ${error.message}`);
@@ -27,16 +33,18 @@ const Skills: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchSkills();
+    fetchSkills(searchKeywords, page, pageSize);
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchSkills(searchKeywords);
+    setPage(0);
+    fetchSkills(searchKeywords, 0, pageSize);
   };
 
   const handlePageChange = (newPage: number) => {
-    fetchSkills(searchKeywords, newPage);
+    setPage(newPage);
+    fetchSkills(searchKeywords, newPage, pageSize);
   };
 
   return (
@@ -115,6 +123,26 @@ const Skills: React.FC = () => {
               )}
             </>
           )}
+
+          <div className="form-group m-top-10">
+            <label htmlFor="pageSize">Items per page:</label>
+            <select
+              id="pageSize"
+              className="form-control"
+              style={{ width: 'auto', display: 'inline-block', marginLeft: '10px' }}
+              onChange={(e) => {
+                const newPageSize = parseInt(e.target.value);
+                setPageSize(newPageSize);
+                setPage(0);
+                fetchSkills(searchKeywords, 0, newPageSize);
+              }}
+              value={String(pageSize)}
+            >
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+          </div>
 
           {message && (
             <div
