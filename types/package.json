@@ -9,7 +9,11 @@
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run clean && npm run build"
   },
-  "keywords": ["typescript", "types", "skills-matrix"],
+  "keywords": [
+    "typescript",
+    "types",
+    "skills-matrix"
+  ],
   "author": "Skills Matrix Team",
   "license": "MIT",
   "devDependencies": {
@@ -17,5 +21,8 @@
   },
   "files": [
     "dist/"
-  ]
+  ],
+  "dependencies": {
+    "@typed-web-api/common": "^1.1.3"
+  }
 }

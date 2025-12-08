@@ -18,8 +18,8 @@ const SkillsMatrix: React.FC = () => {
     const fetchMatrixData = async () => {
       try {
         const [employeesData, skillsData] = await Promise.all([
-          apiService.getEmployees({ pageSize: 1000 }),
-          apiService.getSkills({ pageSize: 1000 }),
+          apiService.getEmployees({ pageSize: '1000' }),
+          apiService.getSkills({ pageSize: '1000' }),
         ]);
 
         // Fetch detailed data for each employee to get their skills

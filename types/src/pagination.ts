@@ -1,7 +1,9 @@
-export interface PaginatedListParameters {
+import { QueryStringBase } from '@typed-web-api/common';
+
+export interface PaginatedListParameters extends QueryStringBase {
   keywords?: string;
-  page?: number;
-  pageSize?: number;
+  page?: string;
+  pageSize?: string;
 }
 
 export interface PaginatedList<T> {

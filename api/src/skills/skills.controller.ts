@@ -1,46 +1,43 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { SkillDto } from '@skills-matrix/types';
+import { Body, Controller, Param, Query } from '@nestjs/common';
+import { PaginatedListParameters, SkillDto, SkillEndpoints } from '@skills-matrix/types';
+import { HttpMethod, ServerEndpoints } from '@typed-web-api/nestjs';
 import { sqlOperationHandler } from '../sql-operation-handler';
 import { SkillsService } from './skills.service';
 
-@Controller('api/skills')
-export class SkillsController {
+@Controller()
+export class SkillsController implements ServerEndpoints<SkillEndpoints> {
   constructor(protected readonly skillsService: SkillsService) {}
 
-  @Get()
-  findAll(
-    @Query('keywords') keywords?: string,
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
-  ) {
+  @HttpMethod()
+  '/skills_get'(@Query() params: PaginatedListParameters) {
     return sqlOperationHandler(
-      () => this.skillsService.findAll({ keywords, page, pageSize }),
+      () => this.skillsService.findAll(params),
       'getManySkillsSql / countAllSkillsSql',
     );
   }
 
-  @Get('getRarest')
-  getRarest() {
+  @HttpMethod()
+  '/skills/getRarest_get'() {
     return sqlOperationHandler(() => this.skillsService.getRarest(), 'getRarestSkillsSql');
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @HttpMethod()
+  '/skills/:id_get'(@Param('id') id: string) {
     return sqlOperationHandler(() => this.skillsService.findOne(+id), 'getOneSkillSql');
   }
 
-  @Post()
-  create(@Body() createSkillDto: SkillDto) {
+  @HttpMethod()
+  '/skills_post'(@Body() createSkillDto: SkillDto) {
     return sqlOperationHandler(() => this.skillsService.create(createSkillDto), 'insertSkillSql');
   }
 
-  @Put()
-  update(@Body() skillDto: SkillDto) {
+  @HttpMethod()
+  '/skills_put'(@Body() skillDto: SkillDto) {
     return sqlOperationHandler(() => this.skillsService.update(skillDto), 'updateSkillSql');
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @HttpMethod()
+  '/skills/:id_delete'(@Param('id') id: string) {
     return sqlOperationHandler(() => this.skillsService.remove(+id), 'deleteSkillSql');
   }
 }

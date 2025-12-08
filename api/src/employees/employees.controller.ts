@@ -1,55 +1,52 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { EmployeeDto } from '@skills-matrix/types';
+import { Body, Controller, Param, Query } from '@nestjs/common';
+import { EmployeeDto, EmployeeEndpoints, PaginatedListParameters } from '@skills-matrix/types';
+import { HttpMethod, ServerEndpoints } from '@typed-web-api/nestjs';
 import { sqlOperationHandler } from '../sql-operation-handler';
 import { EmployeesService } from './employees.service';
 
-@Controller('api/employees')
-export class EmployeesController {
+@Controller()
+export class EmployeesController implements ServerEndpoints<EmployeeEndpoints> {
   constructor(protected readonly employeesService: EmployeesService) {}
 
-  @Get()
-  findAll(
-    @Query('keywords') keywords?: string,
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
-  ) {
+  @HttpMethod()
+  '/employees_get'(@Query() params: PaginatedListParameters) {
     return sqlOperationHandler(
-      () => this.employeesService.findAll({ keywords, page, pageSize }),
+      () => this.employeesService.findAll(params),
       'getManyEmployeesSql / countAllEmployeesSql',
     );
   }
 
-  @Get('/getMostSkilled')
-  getMostSkilled() {
+  @HttpMethod()
+  '/employees/getMostSkilled_get'() {
     return sqlOperationHandler(
       () => this.employeesService.getMostSkilled(),
       'getMostSkilledEmployeesSql',
     );
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @HttpMethod()
+  '/employees/:id_get'(@Param('id') id: string) {
     return sqlOperationHandler(() => this.employeesService.findOne(+id), 'getOneEmployeeSql');
   }
 
-  @Post()
-  create(@Body() employeeDto: EmployeeDto) {
+  @HttpMethod()
+  '/employees_post'(@Body() employeeDto: EmployeeDto) {
     return sqlOperationHandler(
       () => this.employeesService.create(employeeDto),
       'insertEmployeeSql',
     );
   }
 
-  @Put()
-  update(@Body() employeeDto: EmployeeDto) {
+  @HttpMethod()
+  '/employees_put'(@Body() employeeDto: EmployeeDto) {
     return sqlOperationHandler(
       () => this.employeesService.update(employeeDto),
       'updateEmployeeSql',
     );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @HttpMethod()
+  '/employees/:id_delete'(@Param('id') id: string) {
     return sqlOperationHandler(() => this.employeesService.remove(+id), 'deleteEmployeeSql');
   }
 }

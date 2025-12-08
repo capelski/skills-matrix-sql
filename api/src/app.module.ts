@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { DatabaseModule } from './database/database.module';
 import { EmployeeSkillRelationsModule } from './employee-skill-relations/employee-skill-relations.module';
 import { EmployeesModule } from './employees/employees.module';
@@ -14,6 +13,5 @@ import { TablesModule } from './tables/tables.module';
     SkillsModule,
     TablesModule,
   ],
-  controllers: [AppController],
 })
 export class AppModule {}

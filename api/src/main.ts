@@ -6,6 +6,7 @@ async function bootstrap() {
 
   // Enable CORS for frontend connectivity
   app.enableCors();
+  app.setGlobalPrefix('api');
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

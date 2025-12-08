@@ -73,7 +73,7 @@ export class SkillsService {
     return { ...skill, Employees: employees };
   }
 
-  getRarest(): Promise<RareSkill> {
+  getRarest(): Promise<RareSkill[]> {
     return this.databaseService.execute(getRarestSkillsSql);
   }
 

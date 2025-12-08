@@ -17,7 +17,10 @@ const Employees: React.FC = () => {
   const fetchEmployees = async (keywords?: string, page?: number) => {
     setLoading(true);
     try {
-      const data = await apiService.getEmployees({ keywords, page });
+      const data = await apiService.getEmployees({
+        keywords,
+        page: page ? String(page) : undefined,
+      });
       setEmployees(data);
     } catch (error: any) {
       setMessage(`Error: ${error.title} - ${error.message}`);

@@ -1,28 +1,30 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { TableEndpoints } from '@skills-matrix/types';
+import { HttpMethod, ServerEndpoints } from '@typed-web-api/nestjs';
 import { sqlOperationHandler } from '../sql-operation-handler';
 import { TablesService } from './tables.service';
 
-@Controller('api/tables')
-export class TablesController {
+@Controller()
+export class TablesController implements ServerEndpoints<TableEndpoints> {
   constructor(protected readonly tablesService: TablesService) {}
 
-  @Post('/create')
-  createTables() {
+  @HttpMethod()
+  '/tables/create_post'() {
     return sqlOperationHandler(() => this.tablesService.createTables(), 'Error creating tables');
   }
 
-  @Post('/populate')
-  populateTables() {
+  @HttpMethod()
+  '/tables/populate_post'() {
     return sqlOperationHandler(() => this.tablesService.populateTables(), 'Error creating data');
   }
 
-  @Post('/delete')
-  deleteData() {
+  @HttpMethod()
+  '/tables/delete_post'() {
     return sqlOperationHandler(() => this.tablesService.deleteData(), 'Error deleting data');
   }
 
-  @Post('/drop')
-  dropTables() {
+  @HttpMethod()
+  '/tables/drop_post'() {
     return sqlOperationHandler(() => this.tablesService.dropTables(), 'Error dropping tables');
   }
 }

@@ -8,22 +8,11 @@ import {
   SkillDto,
   SkilledEmployee,
 } from '@skills-matrix/types';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { TypedResponse } from '@typed-web-api/client';
+import { typedFetch } from '../typed-fetch';
 
 class ApiService {
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${API_BASE_URL}${endpoint}`;
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      ...options,
-    };
-
-    const response = await fetch(url, config);
-
+  private async handleResponse<T>(response: TypedResponse<T>): Promise<T> {
     if (!response.ok) {
       throw await response.json();
     }
@@ -38,105 +27,85 @@ class ApiService {
 
   // Employees
   async getEmployees(params: PaginatedListParameters = {}): Promise<PaginatedList<Employee>> {
-    const queryParams = new URLSearchParams();
-    if (params.keywords) queryParams.append('keywords', params.keywords);
-    if (params.page) queryParams.append('page', params.page.toString());
-    if (params.pageSize) queryParams.append('pageSize', params.pageSize.toString());
-
-    const query = queryParams.toString();
-    return this.request<PaginatedList<Employee>>(`/employees${query ? `?${query}` : ''}`);
+    const response = await typedFetch('/employees_get', { queryString: params });
+    return this.handleResponse(response);
   }
 
   async getEmployee(id: number): Promise<EmployeeDto> {
-    return this.request<EmployeeDto>(`/employees/${id}`);
+    const response = await typedFetch('/employees/:id_get', { urlParams: { id: String(id) } });
+    return this.handleResponse(response);
   }
 
   async createEmployee(employee: EmployeeDto): Promise<EmployeeDto> {
-    return this.request<EmployeeDto>('/employees', {
-      method: 'POST',
-      body: JSON.stringify(employee),
-    });
+    const response = await typedFetch('/employees_post', { jsonBody: employee });
+    return this.handleResponse(response);
   }
 
   async updateEmployee(employee: EmployeeDto): Promise<EmployeeDto> {
-    return this.request<EmployeeDto>('/employees', {
-      method: 'PUT',
-      body: JSON.stringify(employee),
-    });
+    const response = await typedFetch('/employees_put', { jsonBody: employee });
+    return this.handleResponse(response);
   }
 
-  async deleteEmployee(id: number): Promise<void> {
-    await this.request(`/employees/${id}`, {
-      method: 'DELETE',
-    });
+  async deleteEmployee(id: number) {
+    const response = await typedFetch('/employees/:id_delete', { urlParams: { id: String(id) } });
+    return this.handleResponse(response);
   }
 
   async getMostSkilledEmployees(): Promise<SkilledEmployee[]> {
-    return this.request<SkilledEmployee[]>('/employees/getMostSkilled');
+    const response = await typedFetch('/employees/getMostSkilled_get');
+    return this.handleResponse(response);
   }
 
   // Skills
   async getSkills(params: PaginatedListParameters = {}): Promise<PaginatedList<Skill>> {
-    const queryParams = new URLSearchParams();
-    if (params.keywords) queryParams.append('keywords', params.keywords);
-    if (params.page) queryParams.append('page', params.page.toString());
-    if (params.pageSize) queryParams.append('pageSize', params.pageSize.toString());
-
-    const query = queryParams.toString();
-    return this.request<PaginatedList<Skill>>(`/skills${query ? `?${query}` : ''}`);
+    const response = await typedFetch('/skills_get', { queryString: params });
+    return this.handleResponse(response);
   }
 
   async getSkill(id: number): Promise<SkillDto> {
-    return this.request<SkillDto>(`/skills/${id}`);
+    const response = await typedFetch('/skills/:id_get', { urlParams: { id: String(id) } });
+    return this.handleResponse(response);
   }
 
   async createSkill(skill: SkillDto): Promise<SkillDto> {
-    return this.request<SkillDto>('/skills', {
-      method: 'POST',
-      body: JSON.stringify(skill),
-    });
+    const response = await typedFetch('/skills_post', { jsonBody: skill });
+    return this.handleResponse(response);
   }
 
   async updateSkill(skill: SkillDto): Promise<SkillDto> {
-    return this.request<SkillDto>('/skills', {
-      method: 'PUT',
-      body: JSON.stringify(skill),
-    });
+    const response = await typedFetch('/skills_put', { jsonBody: skill });
+    return this.handleResponse(response);
   }
 
-  async deleteSkill(id: number): Promise<void> {
-    await this.request(`/skills/${id}`, {
-      method: 'DELETE',
-    });
+  async deleteSkill(id: number) {
+    const response = await typedFetch('/skills/:id_delete', { urlParams: { id: String(id) } });
+    return this.handleResponse(response);
   }
 
   async getRarestSkills(): Promise<RareSkill[]> {
-    return this.request<RareSkill[]>('/skills/getRarest');
+    const response = await typedFetch('/skills/getRarest_get');
+    return this.handleResponse(response);
   }
 
   // Table operations
   async createTables(): Promise<void> {
-    await this.request('/tables/create', {
-      method: 'POST',
-    });
+    const response = await typedFetch('/tables/create_post');
+    return this.handleResponse(response);
   }
 
   async populateTables(): Promise<void> {
-    await this.request('/tables/populate', {
-      method: 'POST',
-    });
+    const response = await typedFetch('/tables/populate_post');
+    return this.handleResponse(response);
   }
 
   async deleteTables(): Promise<void> {
-    await this.request('/tables/delete', {
-      method: 'POST',
-    });
+    const response = await typedFetch('/tables/delete_post');
+    return this.handleResponse(response);
   }
 
   async dropTables(): Promise<void> {
-    await this.request('/tables/drop', {
-      method: 'POST',
-    });
+    const response = await typedFetch('/tables/drop_post');
+    return this.handleResponse(response);
   }
 }
 

@@ -17,7 +17,7 @@ const Skills: React.FC = () => {
   const fetchSkills = async (keywords?: string, page?: number) => {
     setLoading(true);
     try {
-      const data = await apiService.getSkills({ keywords, page });
+      const data = await apiService.getSkills({ keywords, page: page ? String(page) : undefined });
       setSkills(data);
     } catch (error: any) {
       setMessage(`Error: ${error.title} - ${error.message}`);
