@@ -1,12 +1,12 @@
 /*** Tables ***/
 
-/** This command creates an employees table with the columns: Id (numerical), Name (text).
- * The Id column is a primary key and auto-increments with each new row */
+/** This command creates an employees table with the columns: Id (numerical), Name (text),
+ * Surname (text). The Id column is a primary key and auto-increments with each new row */
 export const createEmployeesTableSql = `
 `;
 
-/** This command creates a skills table with the columns: Id (numerical), Name (text).
- * The Id column is a primary key and auto-increments with each new row */
+/** This command creates a skills table with the columns: Id (numerical), Name (text),
+ * Description (text). The Id column is a primary key and auto-increments with each new row */
 export const createSkillsTableSql = `
 `;
 
@@ -39,7 +39,8 @@ export const dropEmployeeSkillRelationsTableSql = `
 
 /*** Employees ***/
 
-/** This command counts the number of employees with a name matching :name (e.g. LIKE :name) */
+/** This command returns the number of employees (named as Total)
+ * with a name matching :name (e.g. LIKE :name) */
 export const countAllEmployeesSql = `
 `;
 
@@ -47,7 +48,7 @@ export const countAllEmployeesSql = `
 export const deleteEmployeeByIdSql = `
 `;
 
-/** This command returns :limit number of employees with names matching :name (e.g. LIKE :name), 
+/** This command returns :limit number of employees with names matching :name (e.g. LIKE :name),
  * skipping :offset number of rows and sorting the results by Name */
 export const getManyEmployeesSql = `
 `;
@@ -56,17 +57,18 @@ export const getManyEmployeesSql = `
 export const getEmployeeByIdSql = `
 `;
 
-/** This command inserts a row with Name = :name to the employees table */
+/** This command inserts a row with Name = :name and Surname = :surname to the employees table */
 export const insertEmployeeSql = `
 `;
 
-/** This command sets the Name to :name for an employee with Id = :id */
+/** This command sets the Name to :name and Surname to :surname for an employee with Id = :id */
 export const updateEmployeeByIdSql = `
 `;
 
 /*** Skills ***/
 
-/** This command counts the number of skills with a name matching :name (e.g. LIKE :name) */
+/** This command returns the number of skills (named as Total)
+ * with a name matching :name (e.g. LIKE :name) */
 export const countAllSkillsSql = `
 `;
 
@@ -74,7 +76,7 @@ export const countAllSkillsSql = `
 export const deleteSkillByIdSql = `
 `;
 
-/** This command returns :limit number of employees with names matching :name (e.g. LIKE :name), 
+/** This command returns :limit number of employees with names matching :name (e.g. LIKE :name),
  * skipping :offset number of rows and sorting the results by Name */
 export const getManySkillsSql = `
 `;
@@ -83,11 +85,11 @@ export const getManySkillsSql = `
 export const getSkillByIdSql = `
 `;
 
-/** This command inserts a row with Name = :name to the skills table */
+/** This command inserts a row with Name = :name and Description = :description to the skills table */
 export const insertSkillSql = `
 `;
 
-/** This command sets the Name to :name for a skill with Id = :id */
+/** This command sets the Name to :name and Description to :description for a skill with Id = :id */
 export const updateSkillByIdSql = `
 `;
 
@@ -107,13 +109,13 @@ export const deleteEmployeeSkillRelationBySkillIdSql = `
 export const getEmployeesBySkillSql = `
 `;
 
-/** This command returns the Id, Name and number of skills of the top 5 employees with the largest
- * number of skills, sorted by number of skills (descending) and Name (ascending) */
+/** This command returns the Id, Name and number of skills (named as SkillsCount) of the top 5 employees
+ * with the largest number of skills, sorted by number of skills (descending) and Name (ascending) */
 export const getMostSkilledEmployeesSql = `
 `;
 
-/** This command returns the Id, Name and number of employees of the top 5 skills with the smallest
- * number of employees, sorted by number of employees (ascending) and Name (ascending) */
+/** This command returns the Id, Name and number of employees (named as EmployeesCount) of the top 5 skills
+ * with the smallest number of employees, sorted by number of employees (ascending) and Name (ascending) */
 export const getRarestSkillsSql = `
 `;
 
