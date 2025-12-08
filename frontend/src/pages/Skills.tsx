@@ -34,6 +34,7 @@ const Skills: React.FC = () => {
 
   useEffect(() => {
     fetchSkills(searchKeywords, page, pageSize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {

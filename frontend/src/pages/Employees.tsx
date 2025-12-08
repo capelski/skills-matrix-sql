@@ -34,6 +34,7 @@ const Employees: React.FC = () => {
 
   useEffect(() => {
     fetchEmployees(searchKeywords, page, pageSize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
