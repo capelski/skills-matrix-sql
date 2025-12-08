@@ -1,4 +1,21 @@
 services:
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000/api
+    depends_on:
+      - api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - ./types:/app/node_modules/@skills-matrix/types
+    networks:
+      - skills-matrix-network
+
   api:
     build: ./api
     container_name: api
@@ -16,7 +33,6 @@ services:
       - mysql
     volumes:
       - ./api:/app
-      - ./public:/app/public
       - /app/node_modules
       - ./types:/app/node_modules/@skills-matrix/types
     networks:

@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { AppController } from './app.controller';
 import { DatabaseModule } from './database/database.module';
 import { EmployeeSkillRelationsModule } from './employee-skill-relations/employee-skill-relations.module';
@@ -13,10 +11,6 @@ import { TablesModule } from './tables/tables.module';
     DatabaseModule,
     EmployeesModule,
     EmployeeSkillRelationsModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-      serveRoot: '/',
-    }),
     SkillsModule,
     TablesModule,
   ],

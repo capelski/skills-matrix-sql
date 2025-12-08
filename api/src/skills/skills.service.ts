@@ -3,9 +3,11 @@ import {
   Employee,
   PaginatedList,
   PaginatedListParameters,
+  RareSkill,
   Skill,
   SkillDto,
 } from '@skills-matrix/types';
+import { ResultSetHeader } from 'mysql2';
 import { DatabaseService } from '../database/database.service';
 import { EmployeeSkillRelationsService } from '../employee-skill-relations/employee-skill-relations.service';
 import {
@@ -26,9 +28,11 @@ export class SkillsService {
   ) {}
 
   async create(skillDto: SkillDto): Promise<SkillDto> {
-    const [result] = await this.databaseService.execute(insertSkillSql, { name: skillDto.Name });
+    const result: ResultSetHeader = await this.databaseService.execute(insertSkillSql, {
+      name: skillDto.Name,
+    });
 
-    await this.insertRelations(skillDto, skillDto.Employees);
+    await this.insertRelations(result.insertId, skillDto.Employees);
 
     return this.findOne(result.insertId);
   }
@@ -41,12 +45,12 @@ export class SkillsService {
     const currentKeywords = `%${keywords || ''}%`;
     const currentPage = Number(page) || 0;
     const currentPageSize = Number(pageSize) || 10;
-    const skills = await this.databaseService.execute(getManySkillsSql, {
+    const skills: Skill[] = await this.databaseService.execute(getManySkillsSql, {
       name: currentKeywords,
       limit: String(currentPageSize),
       offset: String(currentPage * currentPageSize),
     });
-    const [{ Total }] = await this.databaseService.execute(countAllSkillsSql, {
+    const [{ Total }]: [{ Total: number }] = await this.databaseService.execute(countAllSkillsSql, {
       name: currentKeywords,
     });
 
@@ -59,30 +63,22 @@ export class SkillsService {
   }
 
   async findOne(id: number): Promise<SkillDto> {
-    const [skill] = await this.databaseService.execute(getSkillByIdSql, { id: String(id) });
+    const [skill]: [Skill] = await this.databaseService.execute(getSkillByIdSql, {
+      id: String(id),
+    });
 
     const employees = await this.employeeSkillRelationsService.findEmployeesBySkill(id);
 
     return { ...skill, Employees: employees };
   }
 
-  async getRarest(): Promise<Skill> {
-    const skills = await this.databaseService.execute(getRarestSkillsSql);
-
-    return skills.map((skill) => {
-      return {
-        Id: skill.Id,
-        Name: skill.Name,
-        Employees: {
-          length: skill.EmployeeCount || 0,
-        },
-      };
-    });
+  getRarest(): Promise<RareSkill> {
+    return this.databaseService.execute(getRarestSkillsSql);
   }
 
-  protected async insertRelations(skill: Skill, employees: Employee[]): Promise<void> {
+  protected async insertRelations(skillId: number, employees: Employee[]): Promise<void> {
     for (const employee of employees) {
-      await this.employeeSkillRelationsService.create(employee.Id, skill.Id);
+      await this.employeeSkillRelationsService.create(employee.Id, skillId);
     }
   }
 
@@ -94,7 +90,7 @@ export class SkillsService {
 
     await this.employeeSkillRelationsService.removeBySkillId(skillDto.Id);
 
-    await this.insertRelations(skillDto, skillDto.Employees);
+    await this.insertRelations(skillDto.Id, skillDto.Employees);
 
     return this.findOne(skillDto.Id);
   }

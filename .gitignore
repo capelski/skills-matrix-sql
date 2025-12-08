@@ -1,3 +1,5 @@
+build/
 dist/
+types/dist/
 mysql/
 node_modules/
