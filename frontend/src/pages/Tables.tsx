@@ -5,7 +5,7 @@ const Tables: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | undefined>(undefined);
 
-  const remoteOperationHandler = async (operation: () => Promise<void>, successMessage: string) => {
+  const remoteOperationHandler = async (operation: () => Promise<any>, successMessage: string) => {
     try {
       setLoading(true);
       setMessage(undefined);
@@ -13,8 +13,7 @@ const Tables: React.FC = () => {
       await operation();
       setMessage(successMessage);
     } catch (error: any) {
-      console.log(error);
-      setMessage(`${error.title || 'Error'} - ${error.message || 'An error occurred'}`);
+      setMessage(error.message || 'An unexpected error occurred');
     } finally {
       setLoading(false);
     }

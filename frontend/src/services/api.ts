@@ -1,12 +1,17 @@
 import {
+  CreateEmployeeDto,
+  CreateSkillDto,
   Employee,
   EmployeeDto,
   PaginatedList,
   PaginatedListParameters,
+  PopulateTablesResult,
   RareSkill,
   Skill,
   SkillDto,
   SkilledEmployee,
+  UpdateEmployeeDto,
+  UpdateSkillDto,
 } from '@skills-matrix/types';
 import { TypedResponse } from '@typed-web-api/client';
 import { typedFetch } from '../typed-fetch';
@@ -36,12 +41,12 @@ class ApiService {
     return this.handleResponse(response);
   }
 
-  async createEmployee(employee: EmployeeDto): Promise<EmployeeDto> {
+  async createEmployee(employee: CreateEmployeeDto): Promise<EmployeeDto> {
     const response = await typedFetch('/employees_post', { jsonBody: employee });
     return this.handleResponse(response);
   }
 
-  async updateEmployee(employee: EmployeeDto): Promise<EmployeeDto> {
+  async updateEmployee(employee: UpdateEmployeeDto): Promise<EmployeeDto> {
     const response = await typedFetch('/employees_put', { jsonBody: employee });
     return this.handleResponse(response);
   }
@@ -67,12 +72,12 @@ class ApiService {
     return this.handleResponse(response);
   }
 
-  async createSkill(skill: SkillDto): Promise<SkillDto> {
+  async createSkill(skill: CreateSkillDto): Promise<SkillDto> {
     const response = await typedFetch('/skills_post', { jsonBody: skill });
     return this.handleResponse(response);
   }
 
-  async updateSkill(skill: SkillDto): Promise<SkillDto> {
+  async updateSkill(skill: UpdateSkillDto): Promise<SkillDto> {
     const response = await typedFetch('/skills_put', { jsonBody: skill });
     return this.handleResponse(response);
   }
@@ -93,7 +98,7 @@ class ApiService {
     return this.handleResponse(response);
   }
 
-  async populateTables(): Promise<void> {
+  async populateTables(): Promise<PopulateTablesResult> {
     const response = await typedFetch('/tables/populate_post');
     return this.handleResponse(response);
   }

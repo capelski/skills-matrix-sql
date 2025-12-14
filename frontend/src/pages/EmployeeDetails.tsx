@@ -36,7 +36,7 @@ const EmployeeDetails: React.FC = () => {
         const skillsData = await apiService.getSkills();
         setAvailableSkills(skillsData.Items);
       } catch (error: any) {
-        setMessage(`Error: ${error.title} - ${error.message}`);
+        setMessage(error.message || 'An unexpected error occurred');
       } finally {
         setLoading(false);
       }
@@ -56,15 +56,22 @@ const EmployeeDetails: React.FC = () => {
 
     try {
       if (isNew) {
-        const newEmployee = await apiService.createEmployee(employee);
+        const newEmployee = await apiService.createEmployee({
+          Name: employee.Name,
+          Surname: employee.Surname,
+          SkillIds: employee.Skills.map((s) => s.Id),
+        });
         navigate(`/employees/${newEmployee.Id}`);
       } else {
-        await apiService.updateEmployee(employee);
+        await apiService.updateEmployee({
+          ...employee,
+          SkillIds: employee.Skills.map((s) => s.Id),
+        });
         setMessage('Employee updated successfully');
       }
       setIsEditing(false);
     } catch (error: any) {
-      setMessage(`Error: ${error.title} - ${error.message}`);
+      setMessage(error.message || 'An unexpected error occurred');
     } finally {
       setLoading(false);
     }
@@ -80,7 +87,7 @@ const EmployeeDetails: React.FC = () => {
       await apiService.deleteEmployee(employeeId);
       navigate('/employees');
     } catch (error: any) {
-      setMessage(`Error: ${error.title} - ${error.message}`);
+      setMessage(error.message || 'An unexpected error occurred');
       setLoading(false);
     }
   };

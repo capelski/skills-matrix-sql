@@ -1,7 +1,11 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
-import { PaginatedListParameters, SkillDto, SkillEndpoints } from '@skills-matrix/types';
+import {
+  CreateSkillDto,
+  PaginatedListParameters,
+  SkillEndpoints,
+  UpdateSkillDto,
+} from '@skills-matrix/types';
 import { HttpMethod, ServerEndpoints } from '@typed-web-api/nestjs';
-import { sqlOperationHandler } from '../sql-operation-handler';
 import { SkillsService } from './skills.service';
 
 @Controller()
@@ -10,34 +14,31 @@ export class SkillsController implements ServerEndpoints<SkillEndpoints> {
 
   @HttpMethod()
   '/skills_get'(@Query() params: PaginatedListParameters) {
-    return sqlOperationHandler(
-      () => this.skillsService.findAll(params),
-      'getManySkillsSql / countAllSkillsSql',
-    );
+    return this.skillsService.findAll(params);
   }
 
   @HttpMethod()
   '/skills/getRarest_get'() {
-    return sqlOperationHandler(() => this.skillsService.getRarest(), 'getRarestSkillsSql');
+    return this.skillsService.getRarest();
   }
 
   @HttpMethod()
   '/skills/:id_get'(@Param('id') id: string) {
-    return sqlOperationHandler(() => this.skillsService.findOne(+id), 'getOneSkillSql');
+    return this.skillsService.findOne(+id);
   }
 
   @HttpMethod()
-  '/skills_post'(@Body() createSkillDto: SkillDto) {
-    return sqlOperationHandler(() => this.skillsService.create(createSkillDto), 'insertSkillSql');
+  '/skills_post'(@Body() createSkillDto: CreateSkillDto) {
+    return this.skillsService.create(createSkillDto);
   }
 
   @HttpMethod()
-  '/skills_put'(@Body() skillDto: SkillDto) {
-    return sqlOperationHandler(() => this.skillsService.update(skillDto), 'updateSkillSql');
+  '/skills_put'(@Body() skillDto: UpdateSkillDto) {
+    return this.skillsService.update(skillDto);
   }
 
   @HttpMethod()
   '/skills/:id_delete'(@Param('id') id: string) {
-    return sqlOperationHandler(() => this.skillsService.remove(+id), 'deleteSkillSql');
+    return this.skillsService.delete(+id);
   }
 }

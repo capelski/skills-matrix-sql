@@ -26,7 +26,7 @@ const Employees: React.FC = () => {
       });
       setEmployees(data);
     } catch (error: any) {
-      setMessage(`Error: ${error.title} - ${error.message}`);
+      setMessage(error.message || 'An unexpected error occurred');
     } finally {
       setLoading(false);
     }

@@ -16,7 +16,7 @@ Skills matrix application with a React frontend, a NestJS web API and a MySQL da
 
 ## Instructions
 
-Write the missing SQL commands in the `sql-commands.ts` file and the web application should start working.
+Write the missing SQL commands in the `sql-commands.ts` file and the web application should start working. With the application running, execute `./test.sh` to make sure your SQL statements work as expected.
 
 ## Architecture
 

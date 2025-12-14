@@ -19,7 +19,7 @@ const Home: React.FC = () => {
         setMostSkilledEmployees(employees);
         setRarestSkills(skills);
       } catch (error: any) {
-        setMessage(`Error: ${error.title} - ${error.message}`);
+        setMessage(error.message || 'An unexpected error occurred');
       } finally {
         setLoading(false);
       }

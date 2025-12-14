@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PopulateTablesResult } from '@skills-matrix/types';
 import { ResultSetHeader } from 'mysql2';
 import { DatabaseService } from '../database/database.service';
 import {
@@ -20,54 +21,71 @@ export class TablesService {
   constructor(protected readonly databaseService: DatabaseService) {}
 
   async createTables() {
-    await this.databaseService.execute(createEmployeesTableSql);
-    await this.databaseService.execute(createSkillsTableSql);
-    await this.databaseService.execute(createEmployeeSkillRelationsTableSql);
+    await this.databaseService.execute('createEmployeesTableSql', createEmployeesTableSql);
+    await this.databaseService.execute('createSkillsTableSql', createSkillsTableSql);
+    await this.databaseService.execute(
+      'createEmployeeSkillRelationsTableSql',
+      createEmployeeSkillRelationsTableSql,
+    );
   }
 
   async deleteData() {
-    await this.databaseService.execute(deleteEmployeesTableSql);
-    await this.databaseService.execute(deleteSkillsTableSql);
+    await this.databaseService.execute('deleteEmployeesTableSql', deleteEmployeesTableSql);
+    await this.databaseService.execute('deleteSkillsTableSql', deleteSkillsTableSql);
   }
 
   async dropTables() {
-    await this.databaseService.execute(dropEmployeeSkillRelationsTableSql);
-    await this.databaseService.execute(dropEmployeesTableSql);
-    await this.databaseService.execute(dropSkillsTableSql);
+    await this.databaseService.execute(
+      'dropEmployeeSkillRelationsTableSql',
+      dropEmployeeSkillRelationsTableSql,
+    );
+    await this.databaseService.execute('dropEmployeesTableSql', dropEmployeesTableSql);
+    await this.databaseService.execute('dropSkillsTableSql', dropSkillsTableSql);
   }
 
-  async populateTables() {
+  async populateTables(): Promise<PopulateTablesResult> {
     const employeeIds: number[] = [];
     for (const employee of sampleEmployees) {
-      const result: ResultSetHeader = await this.databaseService.execute(insertEmployeeSql, {
-        name: employee.name,
-        surname: employee.surname,
-      });
+      const result: ResultSetHeader = await this.databaseService.execute(
+        'insertEmployeeSql',
+        insertEmployeeSql,
+        {
+          name: employee.name,
+          surname: employee.surname,
+        },
+      );
       employeeIds.push(result.insertId);
     }
 
     const skillIds: number[] = [];
     for (const skill of sampleSkills) {
-      const result: ResultSetHeader = await this.databaseService.execute(insertSkillSql, {
-        description: '',
-        name: skill.name,
-      });
+      const result: ResultSetHeader = await this.databaseService.execute(
+        'insertSkillSql',
+        insertSkillSql,
+        {
+          description: '',
+          name: skill.name,
+        },
+      );
       skillIds.push(result.insertId);
     }
 
-    for (const employeeId of employeeIds) {
-      // Each employee gets between 1 and 5 skills
-      const numberOfSkills = Math.floor(Math.random() * 5) + 1;
-      const shuffledSkillIds = skillIds.sort(() => 0.5 - Math.random());
-      const selectedSkillIds = shuffledSkillIds.slice(0, numberOfSkills);
-
-      for (const skillId of selectedSkillIds) {
-        await this.databaseService.execute(insertEmployeeSkillRelationSql, {
-          employeeId: String(employeeId),
-          skillId: String(skillId),
-        });
+    const numberOfSkilledEmployees = 5;
+    const numberOfSkills = 5;
+    for (let employeeIndex = 0; employeeIndex < numberOfSkilledEmployees; employeeIndex++) {
+      for (let skillIndex = employeeIndex; skillIndex < numberOfSkills; skillIndex++) {
+        await this.databaseService.execute(
+          'insertEmployeeSkillRelationSql',
+          insertEmployeeSkillRelationSql,
+          {
+            employeeId: String(employeeIds[employeeIndex]),
+            skillId: String(skillIds[skillIndex - employeeIndex]),
+          },
+        );
       }
     }
+
+    return { employeeIds, skillIds };
   }
 }
 

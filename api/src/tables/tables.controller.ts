@@ -1,7 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { TableEndpoints } from '@skills-matrix/types';
 import { HttpMethod, ServerEndpoints } from '@typed-web-api/nestjs';
-import { sqlOperationHandler } from '../sql-operation-handler';
 import { TablesService } from './tables.service';
 
 @Controller()
@@ -10,21 +9,21 @@ export class TablesController implements ServerEndpoints<TableEndpoints> {
 
   @HttpMethod()
   '/tables/create_post'() {
-    return sqlOperationHandler(() => this.tablesService.createTables(), 'Error creating tables');
+    return this.tablesService.createTables();
   }
 
   @HttpMethod()
   '/tables/populate_post'() {
-    return sqlOperationHandler(() => this.tablesService.populateTables(), 'Error creating data');
+    return this.tablesService.populateTables();
   }
 
   @HttpMethod()
   '/tables/delete_post'() {
-    return sqlOperationHandler(() => this.tablesService.deleteData(), 'Error deleting data');
+    return this.tablesService.deleteData();
   }
 
   @HttpMethod()
   '/tables/drop_post'() {
-    return sqlOperationHandler(() => this.tablesService.dropTables(), 'Error dropping tables');
+    return this.tablesService.dropTables();
   }
 }

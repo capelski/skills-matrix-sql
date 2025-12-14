@@ -1,5 +1,9 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import * as mysql from 'mysql2/promise';
+import { styleText } from 'node:util';
+import { SqlException } from '../sql-exception.filter';
+
+const logger = new Logger('DatabaseService');
 
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnModuleDestroy {
@@ -25,8 +29,14 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async execute(sql: string, params?: Record<string, string>): Promise<any> {
-    const [result] = await this.pool.execute(sql, params);
-    return result;
+  async execute(commandName: string, sql: string, params?: Record<string, string>): Promise<any> {
+    try {
+      const [result] = await this.pool.execute(sql, params);
+      return result;
+    } catch (error: any) {
+      const errorMessage = `Error executing ${commandName}: ${error.message}`;
+      logger.error(styleText('red', errorMessage));
+      throw new SqlException(errorMessage);
+    }
   }
 }
