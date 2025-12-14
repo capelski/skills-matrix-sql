@@ -1,6 +1,8 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
 
 export class SqlException extends Error {}
+
+const logger = new Logger('SqlExceptionFilter');
 
 @Catch()
 export default class SqlExceptionFilter implements ExceptionFilter {
@@ -13,6 +15,7 @@ export default class SqlExceptionFilter implements ExceptionFilter {
     }
 
     const response = ctx.getResponse();
+    logger.error(error.message);
     response.status(500).json({ message: error.message });
   }
 }
