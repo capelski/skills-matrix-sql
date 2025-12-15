@@ -10,23 +10,23 @@ Skills matrix application with a React frontend, a NestJS web API and a MySQL da
 
 ## Execution
 
-- **Start**. Run the `./start.sh` script to start the full application stack and access the web interface at http://localhost:3001
+- **Start**. Run the `./start.sh` script to start the full application stack and access the web app at http://localhost:3001
 
 - **Stop**. Run the `./stop.sh` script to stop the application (it will preserve the data in the MySQL database).
 
 ## Instructions
 
-Due to the missing SQL commands in the `sql-commands.ts` file the web app fails to fetch data from the database.
+- Due to the missing SQL commands in the `sql-commands.ts` file the web app fails to fetch data from the database.
 
-![Web app error due to missing SQL command](./images/employees-list-missing-sql.png)
+  ![Web app error due to missing SQL command](./images/employees-list-missing-sql.png)
 
-Fill out all the SQL commands in `sql-commands.ts` and the web app will then be able to fetch the data.
+- Fill out all the SQL commands in `sql-commands.ts` and the web app will then be able to fetch the data.
 
-![Web app loading data when the SQL command is correct](./images/employees-list-valid-sql.png)
+  ![Web app loading data when the SQL command is correct](./images/employees-list-valid-sql.png)
 
-If any of the SQL commands are not correct the web app will display an error message in the corresponding section.
+- If any of the SQL commands are not correct the web app will display an error message in the corresponding section.
 
-![Web app error due to invalid SQL command](./images/employees-list-invalid-sql.png)
+  ![Web app error due to invalid SQL command](./images/employees-list-invalid-sql.png)
 
 ## Validation
 

@@ -3,6 +3,7 @@ import {
   CreateSkillDto,
   PaginatedList,
   PaginatedListParameters,
+  RareSkill,
   Skill,
   SkillDto,
   UpdateSkillDto,
@@ -16,6 +17,7 @@ let createSkill: CreateSkillDto;
 let updateSkill: UpdateSkillDto;
 let skill: SkillDto | undefined;
 let skillsPage: PaginatedList<Skill>;
+let rareSkills: RareSkill[];
 
 const initializeUpdateSkill = () => {
   if (!updateSkill) {
@@ -92,6 +94,12 @@ const fetchFirstSkill = async (skillId: number) => {
 
 Given('the skill with Id {int}', fetchFirstSkill);
 When('fetching the skill with Id {int}', fetchFirstSkill);
+
+When('fetching the rarest skills', async () => {
+  const app = getNestApp();
+  const skillsService = app.get(SkillsService);
+  rareSkills = await skillsService.getRarest();
+});
 
 When('setting the skill Name to {string}', (name: string) => {
   initializeUpdateSkill();
@@ -170,4 +178,17 @@ Then('the updated skill has {int} employee\\(s)', expectEmployeesCount);
 
 Then('the first skill in the page has Name {string}', (expectedName: string) => {
   expect(skillsPage.Items[0].Name).to.equal(expectedName);
+});
+
+Then(
+  'the rare skill at position {int} has Id {int} and employees count {int}',
+  (position: number, expectedId: number, expectedEmployeesCount: number) => {
+    const rareSkill = rareSkills[position - 1];
+    expect(rareSkill.Id).to.equal(expectedId);
+    expect(rareSkill.EmployeesCount).to.equal(expectedEmployeesCount);
+  },
+);
+
+Then('{int} rare skills are returned', (expectedCount: number) => {
+  expect(rareSkills.length).to.equal(expectedCount);
 });

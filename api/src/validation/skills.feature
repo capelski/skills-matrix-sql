@@ -37,6 +37,15 @@ Feature: Skills commands
     And the current skills page contains 2 items
     And the first skill in the page has Name "MATLAB"
 
+  Scenario: Fetch rarest skills
+    When fetching the rarest skills
+    Then 5 rare skills are returned
+    And the rare skill at position 1 has Id 20 and employees count 0
+    And the rare skill at position 2 has Id 19 and employees count 0
+    And the rare skill at position 3 has Id 18 and employees count 0
+    And the rare skill at position 4 has Id 17 and employees count 0
+    And the rare skill at position 5 has Id 16 and employees count 0
+
   Scenario: Fetch a skill by Id
     When fetching the skill with Id 1
     Then the fetched skill has Name "Object Rexx"

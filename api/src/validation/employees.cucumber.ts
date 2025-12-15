@@ -5,6 +5,7 @@ import {
   EmployeeDto,
   PaginatedList,
   PaginatedListParameters,
+  SkilledEmployee,
   UpdateEmployeeDto,
 } from '@skills-matrix/types';
 import { expect } from 'chai';
@@ -16,6 +17,7 @@ let createEmployee: CreateEmployeeDto;
 let updateEmployee: UpdateEmployeeDto;
 let employee: EmployeeDto | undefined;
 let employeesPage: PaginatedList<Employee>;
+let skilledEmployees: SkilledEmployee[];
 
 const initializeUpdateEmployee = () => {
   if (!updateEmployee) {
@@ -86,6 +88,12 @@ const fetchFirstEmployee = async (employeeId: number) => {
 
 Given('the employee with Id {int}', fetchFirstEmployee);
 When('fetching the employee with Id {int}', fetchFirstEmployee);
+
+When('fetching the most skilled employees', async () => {
+  const app = getNestApp();
+  const employeesService = app.get(EmployeesService);
+  skilledEmployees = await employeesService.getMostSkilled();
+});
 
 When('setting the employee Name to {string}', (name: string) => {
   initializeUpdateEmployee();
@@ -164,4 +172,17 @@ Then('the updated employee has {int} skill\\(s)', expectSkillsCount);
 
 Then('the first employee in the page has Name {string}', (expectedName: string) => {
   expect(employeesPage.Items[0].Name).to.equal(expectedName);
+});
+
+Then(
+  'the skilled employee at position {int} has Id {int} and skills count {int}',
+  (position: number, expectedId: number, expectedSkillsCount: number) => {
+    const skilledEmployee = skilledEmployees[position - 1];
+    expect(skilledEmployee.Id).to.equal(expectedId);
+    expect(skilledEmployee.SkillsCount).to.equal(expectedSkillsCount);
+  },
+);
+
+Then('{int} skilled employees are returned', (expectedCount: number) => {
+  expect(skilledEmployees.length).to.equal(expectedCount);
 });

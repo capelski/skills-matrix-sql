@@ -37,6 +37,15 @@ Feature: Employees commands
     And the current employees page contains 3 items
     And the first employee in the page has Name "Hani"
 
+  Scenario: Fetch most skilled employees
+    When fetching the most skilled employees
+    Then 5 skilled employees are returned
+    And the skilled employee at position 1 has Id 1 and skills count 5
+    And the skilled employee at position 2 has Id 2 and skills count 4
+    And the skilled employee at position 3 has Id 3 and skills count 3
+    And the skilled employee at position 4 has Id 4 and skills count 2
+    And the skilled employee at position 5 has Id 5 and skills count 1
+
   Scenario: Fetch an employee by Id
     When fetching the employee with Id 1
     Then the fetched employee has Name "Adele"
