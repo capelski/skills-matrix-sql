@@ -61,11 +61,11 @@ Feature: Employees commands
     And the created employee has 1 skill(s)
 
   Scenario: Update an employee
-    Given the employee with Id 11
+    Given the employee with Id 20
     When setting the employee Name to "Chris"
     And setting the employee Surname to "Peacock"
     And clearing all the employee skills
-    And adding an association between the employee and the skill with Id 11
+    And adding an association between the employee and the skill with Id 10
     When updating the employee
     Then the updated employee has Name "Chris"
     And the updated employee has Surname "Peacock"

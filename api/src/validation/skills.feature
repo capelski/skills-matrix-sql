@@ -52,22 +52,22 @@ Feature: Skills commands
     And the fetched skill has 5 employee(s)
 
   Scenario: Create a skill
-    Given a new skill with Name "Amy" and Description "Stake"
-    And an association between the new skill and the employee with Id 15
+    Given a new skill with Name "SQL" and Description "Relational databases"
+    And an association between the new skill and the employee with Id 10
     When creating the new skill
-    Then the created skill has Name "Amy"
-    And the created skill has Description "Stake"
+    Then the created skill has Name "SQL"
+    And the created skill has Description "Relational databases"
     And the created skill has 1 employee(s)
 
   Scenario: Update a skill
-    Given the skill with Id 16
-    When setting the skill Name to "Chris"
-    And setting the skill Description to "Peacock"
+    Given the skill with Id 20
+    When setting the skill Name to "Cucumber"
+    And setting the skill Description to "Natural language testing"
     And clearing all the skill employees
-    And adding an association between the skill and the employee with Id 16
+    And adding an association between the skill and the employee with Id 10
     When updating the skill
-    Then the updated skill has Name "Chris"
-    And the updated skill has Description "Peacock"
+    Then the updated skill has Name "Cucumber"
+    And the updated skill has Description "Natural language testing"
     And the updated skill has 1 employee(s)
 
   Scenario: Delete a skill by Id
