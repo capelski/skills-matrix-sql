@@ -12,7 +12,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "test": "cucumber-js --require-module ts-node/register --require 'src/**/*.cucumber.ts' 'src/**/*.feature'"
+    "test": "cucumber-js --require-module ts-node/register --require \"src/**/*.cucumber.ts\" \"src/**/*.feature\""
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
