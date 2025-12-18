@@ -28,6 +28,55 @@ Skills matrix application with a React frontend, a NestJS web API and a MySQL da
 
   ![Web app error due to invalid SQL command](./images/employees-list-invalid-sql.png)
 
+## SQL Commands
+
+### Tables
+
+| Name                                 | Description                                                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| createEmployeesTableSql              | Creates an employees table with the columns: Id (numerical), Name (text), Surname (text). The Id column is a primary key and auto-increments with each new row                                                                                                                                                                                    |
+| createSkillsTableSql                 | Creates a skills table with the columns: Id (numerical), Name (text), Description (text). The Id column is a primary key and auto-increments with each new row                                                                                                                                                                                    |
+| createEmployeeSkillRelationsTableSql | Creates an employees-skills association table with the columns: EmployeeId (numerical), SkillId (numerical). The primary key is made of both EmployeeId and SkillId, and the table has foreign keys referencing the employees and skills tables respectively. Rows on the table are deleted if either the referenced employee or skill is deleted |
+| deleteEmployeesTableSql              | Deletes all rows from the employees table                                                                                                                                                                                                                                                                                                         |
+| deleteSkillsTableSql                 | Deletes all rows from the skills table                                                                                                                                                                                                                                                                                                            |
+| dropEmployeesTableSql                | Drops the employees table                                                                                                                                                                                                                                                                                                                         |
+| dropSkillsTableSql                   | Drops the skills table                                                                                                                                                                                                                                                                                                                            |
+| dropEmployeeSkillRelationsTableSql   | Drops the employees-skills association table                                                                                                                                                                                                                                                                                                      |
+
+### Employees
+
+| Name                   | Description                                                                                                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+|  countAllEmployeesSql  | Returns the number of employees with a name matching :name (e.g. LIKE :name), named as Total                                                                       |
+|  deleteEmployeeByIdSql | Deletes the employee with Id = :id                                                                                                                                 |
+|  getManyEmployeesSql   | Returns all the columns of :limit number of employees with names matching :name (e.g. LIKE :name), skipping :offset number of rows and sorting the results by Name |
+|  getEmployeeByIdSql    | Returns all the columns of the employee with Id = :id                                                                                                              |
+|  insertEmployeeSql     | Inserts a row with Name = :name and Surname = :surname to the employees table                                                                                      |
+|  updateEmployeeByIdSql | Sets Name to :name and Surname to :surname on the employee with Id = :id                                                                                           |
+
+### Skills
+
+| Name                | Description                                                                                                                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  countAllSkillsSql  | Returns the number of skills with a name matching :name (e.g. LIKE :name), named as Total                                                                       |
+|  deleteSkillByIdSql | Deletes the skill with Id = :id                                                                                                                                 |
+|  getManySkillsSql   | Returns all the columns of :limit number of skills with names matching :name (e.g. LIKE :name), skipping :offset number of rows and sorting the results by Name |
+|  getSkillByIdSql    | Returns all the columns of the skill with Id = :id                                                                                                              |
+|  insertSkillSql     | Inserts a row with Name = :name and Description = :description to the skills table                                                                              |
+|  updateSkillByIdSql | Sets Name to :name and Description to :description on the skill with Id = :id                                                                                   |
+
+### Employee-Skill Relations
+
+| Name                                        | Description                                                                                                                                                  |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+|  deleteEmployeeSkillRelationByEmployeeIdSql | Deletes all the rows with EmployeeId = :employeeId from the employees-skills association table                                                               |
+|  deleteEmployeeSkillRelationBySkillIdSql    | Deletes all the rows with skillId = :skillId from the employees-skills association table                                                                     |
+|  getEmployeesBySkillSql                     | Returns the Id and Name of all the employees that have the skill with Id = :skillId                                                                          |
+|  getMostSkilledEmployeesSql                 | Returns the Id, Name and number of skills (named as SkillsCount) of the first 5 employees, sorted by number of skills (descending) and Name (ascending)      |
+|  getRarestSkillsSql                         | Returns the Id, Name and number of employees (named as EmployeesCount) of the first 5 skills, sorted by number of employees (ascending) and Name (ascending) |
+|  getSkillsByEmployeeSql                     | Returns the Id and Name of all the skills that the employee with Id = :employeeId has                                                                        |
+|  insertEmployeeSkillRelationSql             | Inserts a row with EmployeeId = :employeeId and SkillId = :skillId to the employees-skills association table                                                 |
+
 ## Validation
 
 Execute `npm run test` to make sure your SQL statements work as expected. Note that:
