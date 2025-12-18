@@ -1,5 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 cd api
-[[ ! -d node_modules ]] && npm ci
+if [ ! -d node_modules ]; then
+  mkdir directory
+fi
 npm test

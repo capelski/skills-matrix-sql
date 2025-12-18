@@ -1,0 +1,19 @@
+{
+  "name": "skills-matrix-sql",
+  "version": "1.0.0",
+  "description": "Skills matrix application with a React frontend, a NestJS web API and a MySQL database.",
+  "scripts": {
+    "start": "./start.sh",
+    "stop": "./stop.sh",
+    "test": "./test.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capelski/skills-matrix-sql.git"
+  },
+  "keywords": [],
+  "author": "Carles Capellas <capellas.carles@gmail.com>",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "commonjs"
+}

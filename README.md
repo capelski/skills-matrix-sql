@@ -10,9 +10,9 @@ Skills matrix application with a React frontend, a NestJS web API and a MySQL da
 
 ## Execution
 
-- **Start**. Run the `./start.sh` script to start the full application stack and access the web app at http://localhost:3001
+- **Start**. Run the `npm run start` to start the full application stack and access the web app at http://localhost:3001
 
-- **Stop**. Run the `./stop.sh` script to stop the application (it will preserve the data in the MySQL database).
+- **Stop**. Run the `npm run stop` to stop the application (it will preserve the data in the MySQL database). Alternatively, you can remove the Docker stack via Docker Desktop.
 
 ## Instructions
 
@@ -30,9 +30,9 @@ Skills matrix application with a React frontend, a NestJS web API and a MySQL da
 
 ## Validation
 
-Once all the SQL commands have been provided, execute `./test.sh` to make sure your SQL statements work as expected. Note that:
+Execute `npm run test` to make sure your SQL statements work as expected. Note that:
 
-- The application must be running (i.e. you must have run `./start.sh`).
+- The application must be running (i.e. you must have run `npm run start`).
 - Running the tests will drop and re-create all the tables in the database, wiping out all the existing data.
 - After the tests are run, the data will remain in the database and will be accessible on the web app.
 - The validation might fail for different reasons:
