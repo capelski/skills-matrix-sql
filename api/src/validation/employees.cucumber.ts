@@ -1,4 +1,4 @@
-import { Given, Then, When } from '@cucumber/cucumber';
+import { Before, Given, Then, When } from '@cucumber/cucumber';
 import {
   CreateEmployeeDto,
   Employee,
@@ -10,6 +10,7 @@ import {
 } from '@skills-matrix/types';
 import { expect } from 'chai';
 import { EmployeesService } from '../employees/employees.service';
+import { SqlException } from '../sql-exception.filter';
 import { getNestApp } from './setup.cucumber';
 
 let employeesCount: number;
@@ -18,6 +19,17 @@ let updateEmployee: UpdateEmployeeDto;
 let employee: EmployeeDto | undefined;
 let employeesPage: PaginatedList<Employee>;
 let skilledEmployees: SkilledEmployee[];
+let errorMessage: string;
+
+Before(() => {
+  employeesCount = undefined!;
+  createEmployee = undefined!;
+  updateEmployee = undefined!;
+  employee = undefined!;
+  employeesPage = undefined!;
+  skilledEmployees = undefined!;
+  errorMessage = undefined!;
+});
 
 const initializeUpdateEmployee = () => {
   if (!updateEmployee) {
@@ -30,13 +42,16 @@ const initializeUpdateEmployee = () => {
   }
 };
 
-Given('a new employee with Name {string} and Surname {string}', (name: string, surname: string) => {
+const newEmployee = (name: string, surname?: string) => {
   createEmployee = {
     Name: name,
     Surname: surname,
     SkillIds: [],
   };
-});
+};
+
+Given('a new employee with Name {string}', (name: string) => newEmployee(name));
+Given('a new employee with Name {string} and Surname {string}', newEmployee);
 
 Given('an association between the new employee and the skill with Id {int}', (skillId: number) => {
   createEmployee.SkillIds.push(skillId);
@@ -45,7 +60,11 @@ Given('an association between the new employee and the skill with Id {int}', (sk
 When('creating the new employee', async () => {
   const app = getNestApp();
   const employeesService = app.get(EmployeesService);
-  employee = await employeesService.create(createEmployee);
+  try {
+    employee = await employeesService.create(createEmployee);
+  } catch (error) {
+    errorMessage = (error as SqlException).message;
+  }
 });
 
 When('deleting the employee with Id {int}', async (employeeId: number) => {
@@ -146,6 +165,10 @@ Then("the fetched employee doesn't exist", () => {
   expect(employee).to.be.undefined;
 });
 
+Then('the employee creation errors out with message {string}', (expectedMessage: string) => {
+  expect(errorMessage).to.contain(expectedMessage);
+});
+
 const expectEmployeeName = (expectedName: string) => {
   expect(employee?.Name).to.equal(expectedName);
 };
@@ -154,13 +177,15 @@ Then('the created employee has Name {string}', expectEmployeeName);
 Then('the fetched employee has Name {string}', expectEmployeeName);
 Then('the updated employee has Name {string}', expectEmployeeName);
 
-const expectEmployeeSurname = (expectedSurname: string) => {
+const expectEmployeeSurname = (expectedSurname?: string | null) => {
   expect(employee?.Surname).to.equal(expectedSurname);
 };
 
 Then('the created employee has Surname {string}', expectEmployeeSurname);
 Then('the fetched employee has Surname {string}', expectEmployeeSurname);
 Then('the updated employee has Surname {string}', expectEmployeeSurname);
+
+Then('the created employee has no Surname', () => expectEmployeeSurname(null));
 
 const expectSkillsCount = (expectedSkillsCount: number) => {
   expect(employee?.Skills.length).to.equal(expectedSkillsCount);

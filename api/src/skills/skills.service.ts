@@ -21,6 +21,13 @@ import {
   updateSkillByIdSql,
 } from '../sql-commands';
 
+const trimDefaultSkillFields = (skill: CreateSkillDto | UpdateSkillDto) => {
+  return {
+    description: skill.Description?.trim() || null,
+    name: skill.Name?.trim() || null,
+  };
+};
+
 @Injectable()
 export class SkillsService {
   constructor(
@@ -44,10 +51,7 @@ export class SkillsService {
     const result: ResultSetHeader = await this.databaseService.execute(
       'insertSkillSql',
       insertSkillSql,
-      {
-        description: skillDto.Description,
-        name: skillDto.Name,
-      },
+      trimDefaultSkillFields(skillDto),
     );
 
     await this.insertRelations(result.insertId, skillDto.EmployeeIds);
@@ -113,9 +117,8 @@ export class SkillsService {
       'updateSkillByIdSql',
       updateSkillByIdSql,
       {
-        description: skillDto.Description,
         id: String(skillDto.Id),
-        name: skillDto.Name,
+        ...trimDefaultSkillFields(skillDto),
       },
     );
 

@@ -21,6 +21,13 @@ import {
   updateEmployeeByIdSql,
 } from '../sql-commands';
 
+const trimDefaultEmployeeFields = (employee: CreateEmployeeDto | UpdateEmployeeDto) => {
+  return {
+    name: employee.Name?.trim() || null,
+    surname: employee.Surname?.trim() || null,
+  };
+};
+
 @Injectable()
 export class EmployeesService {
   constructor(
@@ -44,10 +51,7 @@ export class EmployeesService {
     const result: ResultSetHeader = await this.databaseService.execute(
       'insertEmployeeSql',
       insertEmployeeSql,
-      {
-        name: employeeDto.Name,
-        surname: employeeDto.Surname,
-      },
+      trimDefaultEmployeeFields(employeeDto),
     );
 
     await this.insertRelations(result.insertId, employeeDto.SkillIds);
@@ -112,8 +116,7 @@ export class EmployeesService {
       updateEmployeeByIdSql,
       {
         id: String(employeeDto.Id),
-        name: employeeDto.Name,
-        surname: employeeDto.Surname,
+        ...trimDefaultEmployeeFields(employeeDto),
       },
     );
 

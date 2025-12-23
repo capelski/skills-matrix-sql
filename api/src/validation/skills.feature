@@ -59,6 +59,17 @@ Feature: Skills commands
     And the created skill has Description "Relational databases"
     And the created skill has 1 employee(s)
 
+  Scenario: Create an employee (no name)
+    Given a new skill with Name ""
+    When creating the new skill
+    Then the skill creation errors out with message "Column 'Name' cannot be null"
+
+  Scenario: Create a skill (no description)
+    Given a new skill with Name "Indescribable"
+    When creating the new skill
+    Then the created skill has Name "Indescribable"
+    And the created skill has no Description
+
   Scenario: Update a skill
     Given the skill with Id 20
     When setting the skill Name to "Cucumber"

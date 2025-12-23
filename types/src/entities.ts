@@ -1,7 +1,7 @@
 export interface Employee {
   Id: number;
   Name: string;
-  Surname?: string;
+  Surname?: string | null;
 }
 
 export interface EmployeeSkillRelation {
@@ -10,7 +10,7 @@ export interface EmployeeSkillRelation {
 }
 
 export interface Skill {
-  Description?: string;
+  Description?: string | null;
   Id: number;
   Name: string;
 }

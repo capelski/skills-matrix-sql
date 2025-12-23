@@ -20,7 +20,13 @@ Skills matrix application with a React frontend, a NestJS web API and a MySQL da
 
   ![Web app error due to missing SQL command](./images/employees-list-missing-sql.png)
 
-- Fill out all the SQL commands in `sql-commands.ts` and the web app will then be able to fetch the data.
+- Fill out all the SQL commands in `sql-commands.ts` and the web app will then be able to fetch the data. **Important** write your commands between the backticks (`), without deleting them. Example
+
+  ```ts
+  export const getManyEmployeesSql = `
+    SELECT * FROM employees;
+  `;
+  ```
 
   ![Web app loading data when the SQL command is correct](./images/employees-list-valid-sql.png)
 
@@ -33,8 +39,8 @@ Skills matrix application with a React frontend, a NestJS web API and a MySQL da
 | Name                                        | Description                                                                                                                                                                                                                                                                                                                                       |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Tables**                                  |                                                                                                                                                                                                                                                                                                                                                   |
-| createEmployeesTableSql                     | Creates an employees table with the columns: Id (numerical), Name (text), Surname (text). The Id column is a primary key and auto-increments with each new row                                                                                                                                                                                    |
-| createSkillsTableSql                        | Creates a skills table with the columns: Id (numerical), Name (text), Description (text). The Id column is a primary key and auto-increments with each new row                                                                                                                                                                                    |
+| createEmployeesTableSql                     | Creates an employees table with the columns: Id (numerical), Name (text, mandatory), Surname (text). The Id column is a primary key and auto-increments with each new row                                                                                                                                                                         |
+| createSkillsTableSql                        | Creates a skills table with the columns: Id (numerical), Name (text, mandatory), Description (text). The Id column is a primary key and auto-increments with each new row                                                                                                                                                                         |
 | createEmployeeSkillRelationsTableSql        | Creates an employees-skills association table with the columns: EmployeeId (numerical), SkillId (numerical). The primary key is made of both EmployeeId and SkillId, and the table has foreign keys referencing the employees and skills tables respectively. Rows on the table are deleted if either the referenced employee or skill is deleted |
 | deleteEmployeesTableSql                     | Deletes all rows from the employees table                                                                                                                                                                                                                                                                                                         |
 | deleteSkillsTableSql                        | Deletes all rows from the skills table                                                                                                                                                                                                                                                                                                            |

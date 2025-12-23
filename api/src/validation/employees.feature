@@ -60,6 +60,17 @@ Feature: Employees commands
     And the created employee has Surname "Stake"
     And the created employee has 1 skill(s)
 
+  Scenario: Create an employee (no name)
+    Given a new employee with Name ""
+    When creating the new employee
+    Then the employee creation errors out with message "Column 'Name' cannot be null"
+
+  Scenario: Create an employee (no surname)
+    Given a new employee with Name "R2D2"
+    When creating the new employee
+    Then the created employee has Name "R2D2"
+    And the created employee has no Surname
+
   Scenario: Update an employee
     Given the employee with Id 20
     When setting the employee Name to "Chris"

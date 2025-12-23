@@ -1,4 +1,4 @@
-import { Given, Then, When } from '@cucumber/cucumber';
+import { Before, Given, Then, When } from '@cucumber/cucumber';
 import {
   CreateSkillDto,
   PaginatedList,
@@ -10,6 +10,7 @@ import {
 } from '@skills-matrix/types';
 import { expect } from 'chai';
 import { SkillsService } from '../skills/skills.service';
+import { SqlException } from '../sql-exception.filter';
 import { getNestApp } from './setup.cucumber';
 
 let skillsCount: number;
@@ -18,6 +19,17 @@ let updateSkill: UpdateSkillDto;
 let skill: SkillDto | undefined;
 let skillsPage: PaginatedList<Skill>;
 let rareSkills: RareSkill[];
+let errorMessage: string;
+
+Before(() => {
+  skillsCount = undefined!;
+  createSkill = undefined!;
+  updateSkill = undefined!;
+  skill = undefined!;
+  skillsPage = undefined!;
+  rareSkills = undefined!;
+  errorMessage = undefined!;
+});
 
 const initializeUpdateSkill = () => {
   if (!updateSkill) {
@@ -30,16 +42,16 @@ const initializeUpdateSkill = () => {
   }
 };
 
-Given(
-  'a new skill with Name {string} and Description {string}',
-  (name: string, description: string) => {
-    createSkill = {
-      Description: description,
-      EmployeeIds: [],
-      Name: name,
-    };
-  },
-);
+const newSkill = (name: string, description?: string) => {
+  createSkill = {
+    Description: description,
+    EmployeeIds: [],
+    Name: name,
+  };
+};
+
+Given('a new skill with Name {string}', (name: string) => newSkill(name));
+Given('a new skill with Name {string} and Description {string}', newSkill);
 
 Given(
   'an association between the new skill and the employee with Id {int}',
@@ -51,7 +63,11 @@ Given(
 When('creating the new skill', async () => {
   const app = getNestApp();
   const skillsService = app.get(SkillsService);
-  skill = await skillsService.create(createSkill);
+  try {
+    skill = await skillsService.create(createSkill);
+  } catch (error) {
+    errorMessage = (error as SqlException).message;
+  }
 });
 
 When('deleting the skill with Id {int}', async (skillId: number) => {
@@ -152,6 +168,10 @@ Then("the fetched skill doesn't exist", () => {
   expect(skill).to.be.undefined;
 });
 
+Then('the skill creation errors out with message {string}', (expectedMessage: string) => {
+  expect(errorMessage).to.contain(expectedMessage);
+});
+
 const expectSkillName = (expectedName: string) => {
   expect(skill?.Name).to.equal(expectedName);
 };
@@ -160,13 +180,15 @@ Then('the created skill has Name {string}', expectSkillName);
 Then('the fetched skill has Name {string}', expectSkillName);
 Then('the updated skill has Name {string}', expectSkillName);
 
-const expectSkillDescription = (expectedDescription: string) => {
+const expectSkillDescription = (expectedDescription?: string | null) => {
   expect(skill?.Description).to.equal(expectedDescription);
 };
 
 Then('the created skill has Description {string}', expectSkillDescription);
 Then('the fetched skill has Description {string}', expectSkillDescription);
 Then('the updated skill has Description {string}', expectSkillDescription);
+
+Then('the created skill has no Description', () => expectSkillDescription(null));
 
 const expectEmployeesCount = (expectedEmployeesCount: number) => {
   expect(skill?.Employees.length).to.equal(expectedEmployeesCount);
