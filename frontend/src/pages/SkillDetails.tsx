@@ -1,6 +1,7 @@
 import { Employee, SkillDto } from '@skills-matrix/types';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import ConfirmModal from '../components/ConfirmModal';
 import { apiService } from '../services/api';
 
 const SkillDetails: React.FC = () => {
@@ -17,6 +18,7 @@ const SkillDetails: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const isNew = !id || id === 'new';
   const skillId = isNew ? 0 : parseInt(id!, 10);
@@ -78,10 +80,7 @@ const SkillDetails: React.FC = () => {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm(`Are you sure you want to delete ${skill.Name}?`)) {
-      return;
-    }
-
+    setIsDeleteModalOpen(false);
     setLoading(true);
     try {
       await apiService.deleteSkill(skillId);
@@ -255,7 +254,7 @@ const SkillDetails: React.FC = () => {
               <button
                 type="button"
                 className="btn btn-danger"
-                onClick={handleDelete}
+                onClick={() => setIsDeleteModalOpen(true)}
                 disabled={loading}
               >
                 Delete
@@ -295,6 +294,14 @@ const SkillDetails: React.FC = () => {
       </form>
 
       <hr />
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        message={`Are you sure you want to delete ${skill.Name}?`}
+        confirmLabel="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setIsDeleteModalOpen(false)}
+      />
+
       <Link to="/skills" className="btn btn-default">
         Skills list
       </Link>

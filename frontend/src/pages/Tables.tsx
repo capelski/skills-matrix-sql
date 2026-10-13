@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import ConfirmModal from '../components/ConfirmModal';
 import { apiService } from '../services/api';
 
 const Tables: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | undefined>(undefined);
+  const [pendingConfirmation, setPendingConfirmation] = useState<
+    { message: string; confirmLabel: string; onConfirm: () => void } | undefined
+  >(undefined);
 
   const remoteOperationHandler = async (operation: () => Promise<any>, successMessage: string) => {
     try {
@@ -31,15 +35,21 @@ const Tables: React.FC = () => {
   };
 
   const handleDeleteData = () => {
-    if (window.confirm('Are you sure you want to delete all data?')) {
-      return remoteOperationHandler(() => apiService.deleteTables(), 'Data deleted successfully');
-    }
+    setPendingConfirmation({
+      message: 'Are you sure you want to delete all data?',
+      confirmLabel: 'Delete Data',
+      onConfirm: () =>
+        remoteOperationHandler(() => apiService.deleteTables(), 'Data deleted successfully'),
+    });
   };
 
-  const handleDropTables = async () => {
-    if (window.confirm('Are you sure you want to drop all tables? This cannot be undone')) {
-      return remoteOperationHandler(() => apiService.dropTables(), 'Tables dropped successfully');
-    }
+  const handleDropTables = () => {
+    setPendingConfirmation({
+      message: 'Are you sure you want to drop all tables? This cannot be undone',
+      confirmLabel: 'Drop Tables',
+      onConfirm: () =>
+        remoteOperationHandler(() => apiService.dropTables(), 'Tables dropped successfully'),
+    });
   };
 
   return (
@@ -86,6 +96,17 @@ const Tables: React.FC = () => {
           <div className={message.includes('Error') ? 'error' : 'success'}>{message}</div>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={pendingConfirmation !== undefined}
+        message={pendingConfirmation?.message ?? ''}
+        confirmLabel={pendingConfirmation?.confirmLabel}
+        onConfirm={() => {
+          pendingConfirmation?.onConfirm();
+          setPendingConfirmation(undefined);
+        }}
+        onCancel={() => setPendingConfirmation(undefined)}
+      />
 
       <style>{`
         @keyframes spin {
