@@ -27,6 +27,9 @@ services:
       - DB_USERNAME=appuser
       - DB_PASSWORD=apppassword
       - DB_DATABASE=skills_matrix
+      # Poll for source changes; native file events are unreliable on Docker bind mounts
+      # (e.g. editors that save by replacing the file leave the watcher on a stale inode)
+      - TSC_WATCHFILE=DynamicPriorityPolling
     depends_on:
       - mysql
     volumes:
