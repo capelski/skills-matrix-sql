@@ -1,29 +1,38 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+const navItems = [
+  { path: '/', label: 'Home' },
+  { path: '/employees', label: 'Employees' },
+  { path: '/skills', label: 'Skills' },
+  { path: '/matrix', label: 'Matrix' },
+  { path: '/tables', label: 'Tables' },
+];
+
 const Header: React.FC = () => {
   const location = useLocation();
+
+  const isActive = (path: string) =>
+    path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
 
   return (
     <header className="header">
       <div className="header-content">
-        <h1>Skills Matrix</h1>
+        <h1>
+          <span className="brand-mark" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+          </span>
+          <span className="brand-text">Skills Matrix</span>
+        </h1>
         <nav className="nav">
-          <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
-            Home
-          </Link>
-          <Link to="/employees" className={location.pathname === '/employees' ? 'active' : ''}>
-            Employees
-          </Link>
-          <Link to="/skills" className={location.pathname === '/skills' ? 'active' : ''}>
-            Skills
-          </Link>
-          <Link to="/matrix" className={location.pathname === '/matrix' ? 'active' : ''}>
-            Matrix
-          </Link>
-          <Link to="/tables" className={location.pathname === '/tables' ? 'active' : ''}>
-            Tables
-          </Link>
+          {navItems.map((item) => (
+            <Link key={item.path} to={item.path} className={isActive(item.path) ? 'active' : ''}>
+              {item.label}
+            </Link>
+          ))}
         </nav>
       </div>
     </header>

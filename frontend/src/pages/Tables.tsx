@@ -54,28 +54,16 @@ const Tables: React.FC = () => {
 
   return (
     <div className="container">
+      <div className="page-header">
+        <h2>Tables</h2>
+      </div>
+
       <div className="card">
         {loading ? (
-          <div className="loading">
-            <div style={{ textAlign: 'center' }}>
-              <div
-                style={{
-                  display: 'inline-block',
-                  width: '20px',
-                  height: '20px',
-                  border: '3px solid #f3f3f3',
-                  borderTop: '3px solid #3498db',
-                  borderRadius: '50%',
-                  animation: 'spin 1s linear infinite',
-                  marginRight: '10px',
-                }}
-              ></div>
-              Processing...
-            </div>
-          </div>
+          <div className="loader">Processing...</div>
         ) : (
-          <div style={{ marginBottom: '20px' }}>
-            <div className="actions" style={{ gap: '10px', flexWrap: 'wrap' }}>
+          <div>
+            <div className="actions">
               <button className="btn btn-primary" onClick={handleCreateTables} disabled={loading}>
                 Create Tables
               </button>
@@ -107,17 +95,6 @@ const Tables: React.FC = () => {
         }}
         onCancel={() => setPendingConfirmation(undefined)}
       />
-
-      <style>{`
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </div>
   );
 };

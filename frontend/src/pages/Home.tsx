@@ -47,7 +47,6 @@ const Home: React.FC = () => {
             magna tortor, fringilla vitae vulputate sit amet, ornare et eros. Vestibulum eget
             suscipit elit
           </p>
-          <img src="/images/skills.png" className="responsive-img" alt="Skills" />
         </div>
       </div>
 
