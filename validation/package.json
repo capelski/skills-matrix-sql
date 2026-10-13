@@ -1,0 +1,24 @@
+{
+  "name": "skills-matrix-validation",
+  "version": "1.0.0",
+  "description": "Skills Matrix SQL commands validation built with Cypress and Cucumber",
+  "author": "Carles Capellas <capellas.carles@gmail.com>",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "open": "cypress open --e2e",
+    "test": "cypress run --e2e"
+  },
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": "cypress/step_definitions/**/*.ts"
+  },
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^28.0.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "@skills-matrix/types": "file:../types",
+    "@types/node": "^20.19.43",
+    "cypress": "^16.1.1",
+    "esbuild": "^0.28.2",
+    "typescript": "^5.9.3"
+  }
+}

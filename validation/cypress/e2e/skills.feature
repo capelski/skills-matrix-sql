@@ -25,10 +25,10 @@ Feature: Skills commands
     And the first skill in the page has Name "Occam"
 
   Scenario: Fetch many skills (non-default page size)
-    When fetching many skills with page size 20
+    When fetching many skills with page size 25
     Then the skills total is 21
     And the current skills page is 0
-    And the current skills page contains 20 items
+    And the current skills page contains 21 items
 
   Scenario: Fetch many skills matching text filter
     When fetching many skills matching the text "Ma"
@@ -53,7 +53,7 @@ Feature: Skills commands
 
   Scenario: Create a skill
     Given a new skill with Name "SQL" and Description "Relational databases"
-    And an association between the new skill and the employee with Id 10
+    And an association between the new skill and the employee "Cher"
     When creating the new skill
     Then the created skill has Name "SQL"
     And the created skill has Description "Relational databases"
@@ -75,7 +75,7 @@ Feature: Skills commands
     When setting the skill Name to "Cucumber"
     And setting the skill Description to "Natural language testing"
     And clearing all the skill employees
-    And adding an association between the skill and the employee with Id 10
+    And adding an association between the skill and the employee "Cher"
     When updating the skill
     Then the updated skill has Name "Cucumber"
     And the updated skill has Description "Natural language testing"

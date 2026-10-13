@@ -3,3 +3,5 @@ dist/
 types/dist/
 mysql/
 node_modules/
+validation/cypress/screenshots/
+validation/cypress/videos/

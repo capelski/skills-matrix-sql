@@ -1,7 +1,7 @@
 #!/bin/sh
 
-cd api
+cd validation
 if [ ! -d node_modules ]; then
-  mkdir directory
+  npm ci
 fi
-npm test
+npm run open

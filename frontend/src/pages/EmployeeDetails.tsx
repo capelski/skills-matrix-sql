@@ -19,6 +19,7 @@ const EmployeeDetails: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   const isNew = !id || id === 'new';
   const employeeId = isNew ? 0 : parseInt(id!, 10);
@@ -29,7 +30,11 @@ const EmployeeDetails: React.FC = () => {
       try {
         if (!isNew) {
           const data = await apiService.getEmployee(employeeId);
-          setEmployee(data!);
+          if (data) {
+            setEmployee(data);
+          } else {
+            setNotFound(true);
+          }
         } else {
           setIsEditing(true);
         }
@@ -117,6 +122,17 @@ const EmployeeDetails: React.FC = () => {
 
   if (loading && !employee.Id && !isNew) {
     return <div className="loader">Loading employee...</div>;
+  }
+
+  if (notFound) {
+    return (
+      <div className="employee-details">
+        <div className="alert alert-danger">Employee not found</div>
+        <Link to="/employees" className="btn btn-default">
+          Employees list
+        </Link>
+      </div>
+    );
   }
 
   const pageTitle = isNew ? 'New Employee' : employee.Name;

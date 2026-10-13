@@ -19,6 +19,7 @@ const SkillDetails: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   const isNew = !id || id === 'new';
   const skillId = isNew ? 0 : parseInt(id!, 10);
@@ -29,7 +30,11 @@ const SkillDetails: React.FC = () => {
       try {
         if (!isNew) {
           const data = await apiService.getSkill(skillId);
-          setSkill(data!);
+          if (data) {
+            setSkill(data);
+          } else {
+            setNotFound(true);
+          }
         } else {
           setIsEditing(true);
         }
@@ -117,6 +122,17 @@ const SkillDetails: React.FC = () => {
 
   if (loading && !skill.Id && !isNew) {
     return <div className="loader">Loading skill...</div>;
+  }
+
+  if (notFound) {
+    return (
+      <div className="skill-details">
+        <div className="alert alert-danger">Skill not found</div>
+        <Link to="/skills" className="btn btn-default">
+          Skills list
+        </Link>
+      </div>
+    );
   }
 
   const pageTitle = isNew ? 'New Skill' : skill.Name;

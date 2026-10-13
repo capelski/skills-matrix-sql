@@ -25,10 +25,10 @@ Feature: Employees commands
     And the first employee in the page has Name "Zayn"
 
   Scenario: Fetch many employees (non-default page size)
-    When fetching many employees with page size 20
+    When fetching many employees with page size 25
     Then the employees total is 21
     And the current employees page is 0
-    And the current employees page contains 20 items
+    And the current employees page contains 21 items
 
   Scenario: Fetch many employees matching text filter
     When fetching many employees matching the text "Ni"
@@ -54,7 +54,7 @@ Feature: Employees commands
 
   Scenario: Create an employee
     Given a new employee with Name "Amy" and Surname "Stake"
-    And an association between the new employee and the skill with Id 10
+    And an association between the new employee and the skill "Moto"
     When creating the new employee
     Then the created employee has Name "Amy"
     And the created employee has Surname "Stake"
@@ -76,7 +76,7 @@ Feature: Employees commands
     When setting the employee Name to "Chris"
     And setting the employee Surname to "Peacock"
     And clearing all the employee skills
-    And adding an association between the employee and the skill with Id 10
+    And adding an association between the employee and the skill "Moto"
     When updating the employee
     Then the updated employee has Name "Chris"
     And the updated employee has Surname "Peacock"
