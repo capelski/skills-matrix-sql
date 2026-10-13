@@ -12,7 +12,7 @@ Skills matrix application with a React frontend, a NestJS web API and a MySQL da
 
 - **Start**. Run the `npm run start` to start the full application stack and access the web app at http://localhost:3001
 
-- **Stop**. Run the `npm run stop` to stop the application (it will preserve the data in the MySQL database). Alternatively, you can remove the Docker stack via Docker Desktop.
+- **Stop**. Press `Ctrl+C` in the terminal running `npm run start`, or run `npm run stop` from another terminal. Both remove the Docker containers but preserve the data in the MySQL database. Alternatively, you can remove the Docker stack via Docker Desktop.
 
 ## Instructions
 
