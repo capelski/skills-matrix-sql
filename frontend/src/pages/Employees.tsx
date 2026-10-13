@@ -106,6 +106,14 @@ const Employees: React.FC = () => {
                 )}
               </ul>
 
+              {employees.TotalItems > 0 && (
+                <p className="list-summary">
+                  Showing {employees.CurrentPage * pageSize + 1}–
+                  {employees.CurrentPage * pageSize + employees.Items.length} of{' '}
+                  {employees.TotalItems} {employees.TotalItems === 1 ? 'employee' : 'employees'}
+                </p>
+              )}
+
               {employees.TotalPages > 1 && (
                 <nav className="text-center m-top-20">
                   <ul className="pagination">

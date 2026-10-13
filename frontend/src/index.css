@@ -568,6 +568,13 @@ select.form-control {
   transform: translateX(2px);
 }
 
+/* Total count shown under paginated lists */
+.list-summary {
+  margin: -12px 0 8px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
 /* Badge */
 .badge {
   display: inline-flex;

@@ -106,6 +106,14 @@ const Skills: React.FC = () => {
                 )}
               </ul>
 
+              {skills.TotalItems > 0 && (
+                <p className="list-summary">
+                  Showing {skills.CurrentPage * pageSize + 1}–
+                  {skills.CurrentPage * pageSize + skills.Items.length} of {skills.TotalItems}{' '}
+                  {skills.TotalItems === 1 ? 'skill' : 'skills'}
+                </p>
+              )}
+
               {skills.TotalPages > 1 && (
                 <nav className="text-center m-top-20">
                   <ul className="pagination">
