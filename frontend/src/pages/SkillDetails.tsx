@@ -48,11 +48,6 @@ const SkillDetails: React.FC = () => {
   }, [skillId, isNew]);
 
   const handleSave = async () => {
-    if (!skill.Name.trim()) {
-      setMessage('Skill name is required');
-      return;
-    }
-
     setLoading(true);
     setMessage('');
 

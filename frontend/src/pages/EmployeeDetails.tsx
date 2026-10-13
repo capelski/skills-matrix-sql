@@ -48,11 +48,6 @@ const EmployeeDetails: React.FC = () => {
   }, [employeeId, isNew]);
 
   const handleSave = async () => {
-    if (!employee.Name.trim()) {
-      setMessage('Employee name is required');
-      return;
-    }
-
     setLoading(true);
     setMessage('');
 
