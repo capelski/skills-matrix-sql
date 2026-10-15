@@ -59,7 +59,7 @@ Feature: Skills commands
     And the created skill has Description "Relational databases"
     And the created skill has 1 employee(s)
 
-  Scenario: Create an employee (no name)
+  Scenario: Create a skill (no name)
     Given a new skill with Name ""
     When creating the new skill
     Then the skill creation errors out with message "Column 'Name' cannot be null"
